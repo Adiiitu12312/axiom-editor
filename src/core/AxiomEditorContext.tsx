@@ -12,8 +12,9 @@ export interface AxiomEditorContextType {
   mediaModalInput: string;
   setMediaModalInput: (input: string) => void;
   uploadImage?: (file: File) => Promise<string>;
-  minHeightClass?: string;
-  maxHeightClass?: string;
+  minHeight?: string | number;
+  maxHeight?: string | number;
+  height?: string | number;
 }
 
 export const AxiomEditorContext = createContext<AxiomEditorContextType | undefined>(undefined);

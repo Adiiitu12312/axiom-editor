@@ -46,8 +46,9 @@ interface AxiomEditorProviderProps {
   onChange?: (json: JSONContent, html: string) => void;
   uploadImage?: (file: File) => Promise<string>;
   children: React.ReactNode;
-  minHeightClass?: string;
-  maxHeightClass?: string;
+  minHeight?: string | number;
+  maxHeight?: string | number;
+  height?: string | number;
 }
 
 export const AxiomEditorProvider: React.FC<AxiomEditorProviderProps> = ({
@@ -55,8 +56,9 @@ export const AxiomEditorProvider: React.FC<AxiomEditorProviderProps> = ({
   onChange,
   uploadImage,
   children,
-  minHeightClass = "min-h-[150px]",
-  maxHeightClass = "max-h-[500px]",
+  minHeight,
+  maxHeight,
+  height,
 }) => {
   const [isSaved, setIsSaved] = useState(true);
   const [mediaModalOpen, setMediaModalOpen] = useState(false);
@@ -154,8 +156,9 @@ export const AxiomEditorProvider: React.FC<AxiomEditorProviderProps> = ({
       mediaModalType, setMediaModalType,
       mediaModalInput, setMediaModalInput,
       uploadImage,
-      minHeightClass,
-      maxHeightClass
+      minHeight,
+      maxHeight,
+      height
     }}>
       {children}
     </AxiomEditorContext.Provider>

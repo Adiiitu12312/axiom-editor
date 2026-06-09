@@ -9,8 +9,9 @@ export interface AxiomEditorProps {
   initialContent: JSONContent | string;
   onChange?: (json: JSONContent, html: string) => void;
   uploadImage?: (file: File) => Promise<string>;
-  minHeightClass?: string;
-  maxHeightClass?: string;
+  minHeight?: string | number;
+  maxHeight?: string | number;
+  height?: string | number;
   hideEmbeds?: boolean;
 }
 
@@ -23,8 +24,9 @@ export const AxiomEditor: React.FC<AxiomEditorProps> = ({
   initialContent,
   onChange,
   uploadImage,
-  minHeightClass,
-  maxHeightClass,
+  minHeight,
+  maxHeight,
+  height,
   // Note: hideEmbeds can be passed into the toolbar if needed, 
   // but for now we just use the default modular toolbar.
 }) => {
@@ -33,8 +35,9 @@ export const AxiomEditor: React.FC<AxiomEditorProps> = ({
       initialContent={initialContent} 
       onChange={onChange} 
       uploadImage={uploadImage}
-      minHeightClass={minHeightClass}
-      maxHeightClass={maxHeightClass}
+      minHeight={minHeight}
+      maxHeight={maxHeight}
+      height={height}
     >
       <div className="axiom-editor-wrapper flex flex-col gap-4">
         <AxiomToolbar />
