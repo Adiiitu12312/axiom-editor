@@ -30,7 +30,9 @@ export default defineConfig({
         'lowlight',
         'tippy.js',
         'tiptap-extension-global-drag-handle',
-        /^@tiptap\/.*/
+        /^@tiptap\/.*/,
+        /^y-.*/,
+        'yjs'
       ],
       output: {
         // Provide global variables to use in the UMD build for externalized deps
