@@ -1,0 +1,179 @@
+.axiom-editor-wrapper {
+  /* Scoped Theme Colors (Default Dark Mode) */
+  --axiom-bg: #0a0a0a;
+  --axiom-bg-card: #171717;
+  --axiom-text: #f5f5f5;
+  --axiom-text-muted: #a3a3a3;
+  --axiom-border: #404040;
+  --axiom-primary: #f59e0b;
+
+  /* Map to Tailwind v4 variables inside the wrapper subtree */
+  --color-obsidian: var(--axiom-bg);
+  --color-charcoal: var(--axiom-bg-card);
+  --color-bone: var(--axiom-text);
+  --color-steel: var(--axiom-text-muted);
+  --color-smoke: var(--axiom-border);
+  --color-amber: var(--axiom-primary);
+}
+
+.axiom-bg {
+  background-color: var(--axiom-bg, #0a0a0a);
+}
+.axiom-bg-card {
+  background-color: var(--axiom-bg-card, #171717);
+}
+.axiom-text {
+  color: var(--axiom-text, #f5f5f5);
+}
+.axiom-text-muted {
+  color: var(--axiom-text-muted, #a3a3a3);
+}
+.axiom-border {
+  border: 1px solid var(--axiom-border, #404040);
+}
+.axiom-border-separator {
+  background-color: var(--axiom-border, #404040);
+  opacity: 0.6;
+}
+.axiom-button-active {
+  color: var(--axiom-primary, #f59e0b) !important;
+  background-color: rgba(245, 158, 11, 0.05) !important;
+}
+.axiom-button-inactive {
+  color: var(--axiom-text-muted, #a3a3a3) !important;
+}
+.axiom-button-inactive:hover {
+  color: var(--axiom-primary, #f59e0b) !important;
+  background-color: rgba(245, 158, 11, 0.05) !important;
+}
+.axiom-primary-text-muted {
+  color: var(--axiom-primary, #f59e0b);
+  opacity: 0.7;
+}
+
+.ProseMirror {
+  outline: none;
+}
+.ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  float: left;
+  color: var(--axiom-text-muted, #a3a3a3);
+  pointer-events: none;
+  height: 0;
+}
+
+/* Global Drag Handle */
+.global-drag-handle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 24px;
+  border-radius: 4px;
+  background-color: transparent;
+  color: var(--axiom-text-muted, #a3a3a3);
+  cursor: grab;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.global-drag-handle:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  color: var(--axiom-primary, #f59e0b);
+}
+
+.global-drag-handle:active {
+  cursor: grabbing;
+}
+
+/* Custom Scrollbar for Editor */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: var(--axiom-border, #3f3f46);
+  border-radius: 8px;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background-color: var(--axiom-text-muted, #52525b);
+}
+
+/* Foolproof Fixed Size */
+.axiom-editor-fixed-size {
+  height: 650px !important;
+}
+
+.axiom-editor-canvas {
+  position: relative;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  min-height: 0;
+}
+
+/* Source Link Citation Pill styling overrides */
+.axiom-source-link-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 3px 10px !important;
+  border-radius: 9999px !important;
+  border: none !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
+  user-select: none !important;
+  cursor: pointer !important;
+  vertical-align: middle !important;
+  line-height: 1.2 !important;
+  transition: all 0.2s !important;
+}
+
+.axiom-source-link-favicon {
+  width: 14px !important;
+  height: 14px !important;
+  min-width: 14px !important;
+  min-height: 14px !important;
+  max-width: 14px !important;
+  max-height: 14px !important;
+  border-radius: 50% !important;
+  object-fit: contain !important;
+  display: inline-block !important;
+  vertical-align: middle !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  flex-shrink: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* Search matches highlighting */
+.axiom-search-match {
+  background-color: rgba(245, 158, 11, 0.35) !important;
+  color: #ffffff !important;
+  border-radius: 2px !important;
+}
+
+.axiom-search-match-active {
+  background-color: rgba(245, 158, 11, 0.85) !important;
+  color: #000000 !important;
+  font-weight: bold !important;
+  box-shadow: 0 0 4px rgba(245, 158, 11, 0.6) !important;
+}
+
+/* Shimmer Loading Animations */
+@keyframes axiom-shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, #8b5cf6 25%, #6366f1 50%, #8b5cf6 75%);
+  background-size: 200% 100%;
+  animation: axiom-shimmer 1.5s infinite linear;
+}
