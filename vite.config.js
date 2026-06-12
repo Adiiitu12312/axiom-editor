@@ -30,6 +30,7 @@ export default defineConfig({
                 'tippy.js',
                 'tiptap-extension-global-drag-handle',
                 /^@tiptap\/.*/,
+                /^prosemirror-.*/,
                 /^y-.*/,
                 'yjs'
             ],
