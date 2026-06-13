@@ -132,3 +132,4 @@ export const CodeBlockNodeView: React.FC<NodeViewProps> = ({
     </NodeViewWrapper>
   );
 };
+ 
