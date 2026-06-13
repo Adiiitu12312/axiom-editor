@@ -2,6 +2,17 @@
   "name": "axiom-editor",
   "version": "1.2.4",
   "description": "A premium narrative architecture block editor built on Tiptap",
+  "keywords": [
+    "react",
+    "tiptap",
+    "wysiwyg",
+    "editor",
+    "rich-text",
+    "notion-clone",
+    "block-editor",
+    "ai-editor",
+    "markdown"
+  ],
   "license": "MIT",
   "type": "module",
   "main": "./dist/axiom-editor.cjs",

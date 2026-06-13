@@ -3,7 +3,23 @@ import { useEditor } from '@tiptap/react';
 import type { JSONContent } from '@tiptap/core';
 import { NodeSelection } from '@tiptap/pm/state';
 import { StarterKit } from '@tiptap/starter-kit';
-import { common, createLowlight } from 'lowlight';
+import { createLowlight } from 'lowlight';
+import javascript from 'highlight.js/lib/languages/javascript';
+import typescript from 'highlight.js/lib/languages/typescript';
+import xml from 'highlight.js/lib/languages/xml'; // handles HTML
+import css from 'highlight.js/lib/languages/css';
+import python from 'highlight.js/lib/languages/python';
+import json from 'highlight.js/lib/languages/json';
+import bash from 'highlight.js/lib/languages/bash';
+import sql from 'highlight.js/lib/languages/sql';
+import rust from 'highlight.js/lib/languages/rust';
+import go from 'highlight.js/lib/languages/go';
+import cpp from 'highlight.js/lib/languages/cpp';
+import csharp from 'highlight.js/lib/languages/csharp';
+import java from 'highlight.js/lib/languages/java';
+import markdown from 'highlight.js/lib/languages/markdown';
+import yaml from 'highlight.js/lib/languages/yaml';
+
 import { TextStyle } from '@tiptap/extension-text-style';
 import { CustomCodeBlockExtension } from '../extensions/code-block';
 import { TaskList } from '@tiptap/extension-task-list';
@@ -11,7 +27,23 @@ import { TaskItem } from '@tiptap/extension-task-item';
 
 import 'highlight.js/styles/atom-one-dark.css'; // Add the CSS for syntax highlighting
 
-const lowlight = createLowlight(common);
+const lowlight = createLowlight();
+lowlight.register('javascript', javascript);
+lowlight.register('typescript', typescript);
+lowlight.register('html', xml);
+lowlight.register('css', css);
+lowlight.register('python', python);
+lowlight.register('json', json);
+lowlight.register('bash', bash);
+lowlight.register('sql', sql);
+lowlight.register('rust', rust);
+lowlight.register('go', go);
+lowlight.register('cpp', cpp);
+lowlight.register('csharp', csharp);
+lowlight.register('java', java);
+lowlight.register('markdown', markdown);
+lowlight.register('yaml', yaml);
+
 const CustomTextStyle = TextStyle.extend({
   addAttributes() {
     return {

@@ -162,3 +162,7 @@ For advanced developers wanting to fork, extend, or contribute:
 
 ---
 *Built with ❤️ for modern narrative experiences.*
+
+<br />
+
+**Tags:** `react-editor` `tiptap-extensions` `notion-style-editor` `block-editor` `wysiwyg` `ai-copilot` `rich-text-editor` `markdown-editor` `tailwind-editor`
