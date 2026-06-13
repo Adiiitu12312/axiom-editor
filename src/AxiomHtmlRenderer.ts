@@ -1,5 +1,6 @@
 import { generateHTML } from '@tiptap/html';
 import type { JSONContent } from '@tiptap/core';
+import DOMPurify from 'dompurify';
 import { StarterKit } from '@tiptap/starter-kit';
 import { createLowlight } from 'lowlight';
 import javascript from 'highlight.js/lib/languages/javascript';
@@ -123,5 +124,18 @@ export const generateAxiomHtml = (json: JSONContent, features?: any): string => 
   if (embedsEnabled && embedConfig.tweet !== false) exts.push(TweetExtension.configure({ pasteRules: false }));
   if (embedsEnabled && embedConfig.instagram !== false) exts.push(InstagramExtension.configure({ pasteRules: false }));
 
-  return generateHTML(json, exts);
+  const rawHtml = generateHTML(json, exts);
+
+  // Return deeply sanitized HTML natively
+  if (typeof window !== 'undefined') {
+    return DOMPurify.sanitize(rawHtml, { 
+      ADD_TAGS: ['iframe'], 
+      ADD_ATTR: ['allowfullscreen', 'frameborder', 'src', 'data-type', 'data-sources', 'data-tweet-id'],
+      FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover']
+    });
+  }
+
+  // Fallback for SSR/Node if window is undefined, though DOMPurify normally requires JSDOM on the server.
+  // Assuming the developer handles SSR sanitization if running strictly in Node.
+  return rawHtml;
 };

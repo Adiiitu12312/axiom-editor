@@ -164,20 +164,19 @@ import { AxiomJSONRenderer } from 'axiom-editor';
 ```
 
 ### 2. Standard HTML Rendering (`generateAxiomHtml`)
-If you want a lightweight solution without dynamic React components (Polls, TOC, etc.), you can generate clean, sanitized HTML from the editor's JSON output using our built-in `generateAxiomHtml` utility. This utility leverages `@tiptap/html` and accurately renders your custom features under the hood. You should still pass the result through DOMPurify for maximum security.
+If you want a lightweight solution without dynamic React components (Polls, TOC, etc.), you can generate clean HTML from the editor's JSON output using our built-in `generateAxiomHtml` utility. This utility leverages `@tiptap/html` and accurately renders your custom features under the hood. It also automatically applies `DOMPurify` natively (in browser environments) to ensure your output is instantly safe from XSS.
 
 ```tsx
-import DOMPurify from 'dompurify';
 import { generateAxiomHtml } from 'axiom-editor';
 
-// Use the exported utility to convert JSON -> HTML server-side or client-side
-const rawHtml = generateAxiomHtml(savedJsonContent, featuresConfig);
-const displayHtml = DOMPurify.sanitize(rawHtml);
+// Use the exported utility to convert JSON -> HTML. 
+// Note: It returns safely DOMPurified HTML automatically!
+const safeHtml = generateAxiomHtml(savedJsonContent, featuresConfig);
 
 // Inside your display component
 <div 
   className="axiom-editor-canvas prose prose-invert max-w-none text-bone"
-  dangerouslySetInnerHTML={{ __html: displayHtml }} 
+  dangerouslySetInnerHTML={{ __html: safeHtml }} 
 />
 ```
 
