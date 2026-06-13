@@ -1,6 +1,6 @@
 {
   "name": "axiom-editor",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "A premium narrative architecture block editor built on Tiptap",
   "license": "MIT",
   "type": "module",
@@ -78,4 +78,3 @@
     "vite-plugin-dts": "^4.0.0"
   }
 }
- 
