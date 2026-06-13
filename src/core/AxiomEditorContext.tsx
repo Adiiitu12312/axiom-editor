@@ -4,6 +4,18 @@ import type * as Y from 'yjs';
 import type { HocuspocusProvider } from '@hocuspocus/provider';
 
 export interface AxiomFeaturesConfig {
+  // Core Extensions (In-Depth Disabling)
+  image?: boolean;         // default: true
+  codeBlock?: boolean;     // default: true
+  blockquote?: boolean;    // default: true
+  link?: boolean;          // default: true
+  list?: boolean;          // default: true (bullet, ordered, task)
+  align?: boolean;         // default: true
+  heading?: boolean;       // default: true
+  bold?: boolean;          // default: true
+  italic?: boolean;        // default: true
+
+  // Premium Features
   slashCommands?: boolean; // default: true
   aiCopilot?: boolean | { provider: (prompt: string) => Promise<string> };
   findReplace?: boolean;   // default: true
@@ -27,7 +39,9 @@ export interface AxiomFeaturesConfig {
   bubbleMenu?: boolean | {
     items?: string[]; // e.g. ['bold', 'italic', 'h1', 'image']
   };
-  toolbar?: boolean;       // default: true
+  toolbar?: boolean | {
+    items?: string[]; // e.g. ['undo', 'redo', 'bold', 'italic', 'h1', 'image']
+  };
   pasteRules?: boolean | {
     embeds?: boolean;      // Disables auto-embeds for youtube, tweet, instagram
     sourceLink?: boolean;  // Disables regex text formatting for source pills

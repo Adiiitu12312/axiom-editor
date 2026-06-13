@@ -1,6 +1,6 @@
 <div align="center">
-  <h1>🌌 Axiom Editor</h1>
-  <p><strong>A premium, highly modular narrative architecture block editor built on React, Tiptap, and Tailwind CSS.</strong></p>
+  <h1>🪐 Axiom Editor (v3.0)</h1>
+  <p><strong>A premium, enterprise-ready block editor built on Tiptap & React.</strong></p>
   
   [![NPM Version](https://img.shields.io/npm/v/axiom-editor.svg?style=flat-square)](https://www.npmjs.com/package/axiom-editor)
   [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](https://opensource.org/licenses/MIT)
@@ -50,46 +50,46 @@ export default App;
 
 ## ⚙️ Ultimate Modularity (Feature Flags)
 
-Axiom is built for extreme versatility. You can strip it down to a barebones `<textarea>` or enable full Notion-style capabilities by passing a `features` configuration object.
+### 1. The Editor component
+The `AxiomEditor` is the core text area. It accepts standard Tiptap `initialContent` (HTML string or JSON) and calls `onChange` whenever the content is modified.
+
+### 2. Feature Configuration (In-Depth Disabling)
+Axiom allows you to completely enable or disable individual blocks, plugins, and UI components. When a feature (like `codeBlock` or `image`) is disabled, **the underlying extension is completely unloaded**, preventing any bypasses via Markdown shortcuts or pasted HTML. 
 
 ```tsx
-<AxiomEditor
-  initialContent="<p>Start writing...</p>"
-  features={{
-    // -----------------------------------------
-    // Core UI Elements
-    // -----------------------------------------
-    toolbar: true,           // Fixed formatting toolbar at the top of the editor
-    bubbleMenu: true,        // Floating text-selection menu (Bold, Italic, Ask AI)
-    slashCommands: true,     // Floating '/' popup menu for block insertion
-    
-    // -----------------------------------------
-    // Advanced Extensions
-    // -----------------------------------------
-    findReplace: true,       // CTRL+F / CMD+F floating search and replace menu
-    callout: true,           // Enables /callout block for highlighted text
-    poll: true,              // Enables /poll interactive voting blocks
-    stash: true,             // Enables /stash drawer block
-    tableOfContents: true,   // Auto-generates a TOC based on heading tags
-    
-    // -----------------------------------------
-    // Media & Embeds
-    // -----------------------------------------
-    embeds: {
-      youtube: true,
-      tweet: true,
-      instagram: true,
-    },
-    
-    // -----------------------------------------
-    // Granular Paste Behaviors
-    // -----------------------------------------
-    pasteRules: {
-      embeds: true,          // If true, pasting a Youtube/X URL auto-expands into a rich block. If false, pastes as plain text link.
-      sourceLink: true,      // If true, pasting matching syntax converts to a custom Source Pill UI.
-    }
-  }}
-/>
+const features = {
+  // Core Text Blocks (Level 10 Security: fully unloads extension if false)
+  image: true,         // Allows image uploads & drops
+  codeBlock: true,     // Allows ``` syntax and code blocks
+  heading: true,       // Allows h1, h2, h3
+  blockquote: true,    // Allows blockquotes
+  link: true,          // Allows hyperlink parsing
+  list: true,          // Handles bullet, ordered, and task lists
+  align: true,         // Allows text alignment
+  bold: true,          
+  italic: true,        
+
+  // UI Components
+  toolbar: {
+    // Pass an array to strictly define which buttons appear in the toolbar
+    items: ['bold', 'italic', 'h1', 'h2', 'codeBlock', 'image', 'video']
+  },
+  bubbleMenu: true,        // Floating text-selection menu
+  slashCommands: true,     // Floating '/' popup menu for block insertion
+
+  // Premium Blocks
+  aiCopilot: { provider: customAIProvider }, // Set to false to disable
+  callout: true,           // Warning/Info Callout blocks
+  poll: true,              // Interactive poll blocks
+  tableOfContents: true,   // Dynamic TOC sidebar
+  
+  // Third-Party Embeds
+  embeds: {
+    youtube: true,
+    tweet: true,
+    instagram: true
+  }
+};
 ```
 
 ---
@@ -143,13 +143,11 @@ To completely customize the UI (the Toolbar, Slash Menu, AI Copilot, Bubble Menu
 
 ---
 
-## 🛡️ Security & XSS Sanitization
-
-Axiom Editor prioritizes security when handling rich text and pasted HTML. Under the hood, it uses **DOMPurify** to ruthlessly sanitize all incoming payloads before they hit the DOM.
-
-- **Strict Tag Filtering**: Only explicitly whitelisted tags are allowed. Potentially dangerous tags (`<script>`, `<object>`, `<embed>`) are stripped immediately.
-- **Iframe Validation**: `<iframe>` tags are permitted (to support YouTube embeds), but we strictly validate the `src` attribute. If a user pastes an iframe that doesn't start with `https://www.youtube.com/embed/`, the element is immediately deleted from the DOM.
-- **Attribute Stripping**: All inline event handlers (`onclick`, `onerror`, `onload`, `onmouseover`) are explicitly forbidden and stripped from pasted HTML to prevent Cross-Site Scripting (XSS) attacks.
+## 🛡️ Level 10 Security
+Axiom implements military-grade security for user-generated content:
+- **Zero-Bypass Disabling:** If a core feature (like `image` or `codeBlock`) is disabled in the config, the extension is stripped from the engine at runtime. Users cannot bypass this via pasted HTML, drag-and-drop, or Markdown shortcuts.
+- **Deep DOMPurify Sanitization:** All initial HTML strings and dynamically pasted HTML are piped through `dompurify` before ever touching the DOM.
+- **Iframe Strictness:** Only `youtube.com/embed/` URLs are allowed in iframes. `onerror`, `onload`, and `onclick` attributes are aggressively stripped to prevent XSS.
 
 ---
 

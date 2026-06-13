@@ -132,7 +132,12 @@ export const AxiomEditorProvider: React.FC<AxiomEditorProviderProps> = ({
   const extensions = React.useMemo(() => {
     const exts: any[] = [
       StarterKit.configure({ 
-        heading: { levels: [1, 2, 3] },
+        heading: features?.heading !== false ? { levels: [1, 2, 3] } : false,
+        bold: features?.bold !== false ? {} : false,
+        italic: features?.italic !== false ? {} : false,
+        blockquote: features?.blockquote !== false ? {} : false,
+        bulletList: features?.list !== false ? {} : false,
+        orderedList: features?.list !== false ? {} : false,
         strike: false,
         codeBlock: false,
         horizontalRule: false,
@@ -142,20 +147,30 @@ export const AxiomEditorProvider: React.FC<AxiomEditorProviderProps> = ({
       ColoredStrike,
       CustomTextStyle,
       Color,
-      TextAlign.configure({ types: ['heading', 'paragraph', 'image', 'youtube'] }),
-      Link.configure({ 
+    ];
+
+    if (features?.align !== false) {
+      exts.push(TextAlign.configure({ types: ['heading', 'paragraph', 'image', 'youtube'] }));
+    }
+    if (features?.link !== false) {
+      exts.push(Link.configure({ 
         openOnClick: false, 
         HTMLAttributes: { 
           class: 'text-amber hover:text-amber/80 transition-colors underline underline-offset-4 cursor-pointer',
           rel: 'noopener noreferrer'
         },
         validate: href => /^https?:\/\//.test(href) || /^mailto:/.test(href)
-      }),
-      CustomImageExtension.configure({ inline: false }),
-      CustomCodeBlockExtension.configure({ lowlight }),
-      TaskList,
-      TaskItem.configure({ nested: true }),
-    ];
+      }));
+    }
+    if (features?.image !== false) {
+      exts.push(CustomImageExtension.configure({ inline: false }));
+    }
+    if (features?.codeBlock !== false) {
+      exts.push(CustomCodeBlockExtension.configure({ lowlight }));
+    }
+    if (features?.list !== false) {
+      exts.push(TaskList, TaskItem.configure({ nested: true }));
+    }
 
     if (features?.dragDrop !== false) {
       exts.push(GlobalDragHandle.configure({
