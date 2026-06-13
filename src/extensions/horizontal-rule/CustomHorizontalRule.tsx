@@ -22,3 +22,4 @@ export const CustomHorizontalRule = ({ deleteNode }: { deleteNode: () => void })
     </NodeViewWrapper>
   );
 };
+ 
