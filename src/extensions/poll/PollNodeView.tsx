@@ -268,3 +268,4 @@ export const PollNodeView: React.FC<NodeViewProps> = ({ node, updateAttributes, 
     </NodeViewWrapper>
   );
 };
+ 
