@@ -1,165 +1,101 @@
-# Axiom Editor
+# Axiom Editor 🌌
 
-A premium, highly-customizable rich-text narrative architecture block editor built on top of [Tiptap](https://tiptap.dev).
-
-## Installation
-
-```bash
-npm install axiom-editor
-```
-*(Peer dependencies: `react`, `react-dom`)*
-
-## Quick Start
-
-```tsx
-import { useState } from 'react';
-import { AxiomEditor } from 'axiom-editor';
-import 'axiom-editor/style.css';
-
-export default function App() {
-  const [json, setJson] = useState({});
-  const [html, setHtml] = useState('');
-
-  return (
-    <AxiomEditor 
-      initialContent={json}
-      onChange={(newJson, newHtml) => {
-        setJson(newJson);
-        setHtml(newHtml);
-      }}
-      height={650}
-    />
-  );
-}
-```
+A premium, highly modular narrative architecture block editor built on top of React, Tiptap, and Tailwind CSS. Designed to provide a cinematic, block-based writing experience with deep customization, AI integration, and native rich-media embedding.
 
 ---
 
-## 🎨 Theme Customisation Guide
+## 🎨 Design Aesthetics & Customization
 
-Axiom Editor is fully themeable using plain CSS variables. You can override the default colors to match any application theme by declaring these variables in your parent container or wrapping CSS class.
+Axiom Editor doesn't force a rigid UI on you. It relies on **CSS Variables** allowing you to seamlessly integrate it into any dark-mode, glassmorphic, or premium application design.
 
-### Available CSS Variables
+### Theming via CSS Variables
+To customize the UI (the Toolbar, Slash Menu, AI Copilot, Bubble Menu, etc.), simply define these variables in your global CSS where the editor is mounted. 
 
 ```css
-.my-custom-theme {
-  --axiom-bg: #0a0a0a;          /* Main editor background */
-  --axiom-bg-card: #171717;     /* Background for sidebars, toolbars, and modals */
-  --axiom-text: #f5f5f5;        /* Primary text color */
-  --axiom-text-muted: #a3a3a3;  /* Muted text (placeholders, secondary icons) */
-  --axiom-border: #404040;      /* Border colors for dividers and panels */
-  --axiom-primary: #f59e0b;     /* Primary accent color (active buttons, highlights) */
+:root {
+  /* Core Backgrounds */
+  --axiom-bg: rgba(20, 20, 20, 0.8);
+  --axiom-bg-hover: rgba(255, 255, 255, 0.1);
+  
+  /* Text Colors */
+  --axiom-text: #ffffff;
+  --axiom-text-muted: #a0a0a0;
+  
+  /* Borders and Highlights */
+  --axiom-border: rgba(255, 255, 255, 0.15);
+  --axiom-primary: #3b82f6; /* Used for active states and highlights */
 }
 ```
-
-### Usage
-
-Just apply your theme class to the container wrapping the editor:
-
-```tsx
-<div className="my-custom-theme">
-  <AxiomEditor />
-</div>
-```
+*Note: Because the editor uses CSS variables, all popups (Slash menus, Poll config, Media config) will instantly adapt to your application's colors, preserving a unified brand aesthetic!*
 
 ---
 
-## ⚙️ Feature Customisation Guide
+## ⚙️ Ultimate Modularity (Feature Flags)
 
-Axiom Editor ships with 4 massive "Next-Gen" features. Because Axiom is unopinionated about your backend, **all of these features are entirely optional** and customizable via the `features` prop.
-
-You can toggle each feature on or off:
+Axiom is built for extreme versatility. You can strip it down to a barebones `<textarea>` or enable full Notion-style capabilities by configuring the `features` prop.
 
 ```tsx
-<AxiomEditor 
+import { AxiomEditor } from 'axiom-editor';
+
+<AxiomEditor
+  initialContent="<p>Start writing...</p>"
   features={{
-    collaboration: false, // Set to an object to enable
-    poll: true,           // Native Live Polls (Default: true)
-    dragDrop: true,       // Notion-style Block Reordering (Default: true)
-    aiCopilot: false,     // Set to an object to enable Full-Document AI
-  }}
-/>
-```
-
-### 1. Multiplayer Real-time Collaboration (Yjs)
-Inject any Yjs provider (e.g., Supabase, WebRTC, Hocuspocus) to enable instant Google Docs-style collaboration with live cursors.
-
-```tsx
-import * as Y from 'yjs';
-import { SupabaseProvider } from 'y-supabase';
-
-const ydoc = new Y.Doc();
-const provider = new SupabaseProvider(ydoc, supabaseClient, { channel: 'my-room' });
-
-<AxiomEditor 
-  features={{
-    collaboration: {
-      document: ydoc,
-      provider: provider,
-      user: { name: 'Alice', color: '#ffbf00' }
+    // UI Elements
+    toolbar: true,           // Shows the fixed formatting toolbar at the top
+    bubbleMenu: true,        // Shows the floating text selection menu (Bold, Italic, Ask AI)
+    slashCommands: true,     // Enables the '/' popup menu for block insertion
+    
+    // Extensions
+    findReplace: true,       // CTRL+F / CMD+F to search and replace text
+    callout: true,           // Enables /callout block
+    poll: true,              // Enables /poll interactive blocks
+    
+    // Media & Embeds
+    embeds: {
+      youtube: true,
+      tweet: true,
+      instagram: true,
+    },
+    
+    // Granular Paste Behaviors
+    pasteRules: {
+      embeds: true,          // Auto-expands pasted Youtube/Twitter URLs into rich blocks
+      sourceLink: true,      // Auto-formats text matching /cite-("Name"|"url")
     }
   }}
 />
 ```
 
-### 2. Full-Document AI Sidebar
-The AI Copilot operates purely via a callback. You provide an async function that calls your preferred LLM backend (OpenAI, Anthropic, or a custom API). Axiom handles the sliding sidebar UI, prompts, loading states, and inserting the response.
-
-```tsx
-<AxiomEditor 
-  features={{
-    aiCopilot: {
-      provider: async (prompt) => {
-        // Post the prompt to your own secure backend
-        const response = await fetch('/api/my-llm', { body: JSON.stringify({ prompt }) });
-        return await response.text();
-      }
-    }
-  }}
-/>
-```
-
-### 3. Interactive Live Polls
-A native Poll block that syncs votes across multiplayer clients without needing a dedicated polling backend (relies on Yjs state).
-- Enabled by default if you don't pass `features.poll = false`.
-
-### 4. Notion-Style Drag & Drop
-Hover over any block to reveal a 6-dot drag handle to easily reorder content.
-- Enabled by default if you don't pass `features.dragDrop = false`.
+### 🧩 The `pasteRules` Configuration
+Axiom's paste rules are highly granular. 
+- Want users to be able to paste YouTube links as plain text without them turning into giant videos? Set `pasteRules.embeds = false`.
+- Want to keep the custom `Source Pill` auto-formatting active? Keep `pasteRules.sourceLink = true`.
 
 ---
 
-## 🔒 Environment Variables Guide
+## 🤖 Features & Operations
 
-While the `axiom-editor` NPM package itself **does not read `.env` files** (it is a pure React component), the application consuming it (e.g. your Next.js or Vite app) will likely need environment variables to power the backend providers for the features mentioned above.
+1. **AI Copilot (`AxiomAICopilot.tsx`)**
+   - Highlighting text and selecting **"Ask AI"** from the floating Bubble Menu brings up the Copilot Sidebar.
+   - Built to handle prompts like "Summarize this", "Improve phrasing", or "Fix grammar".
+   - *Architecture*: Intercepts Tiptap editor state, reads the highlighted selection, and replaces it with AI-generated responses (backend hook required).
 
-Here are the typical environment variables your host application should configure:
+2. **Slash Menu (`/`)**
+   - Typing `/` anywhere on a blank line triggers a floating Command List.
+   - *Customization*: You can disable this entirely via `features.slashCommands = false`. It intelligently tracks your cursor and prevents overflow off the screen.
 
-```env
-# 1. SUPABASE (For Multiplayer Collaboration & Sync)
-VITE_SUPABASE_URL="https://your-project-id.supabase.co"
-VITE_SUPABASE_ANON_KEY="your-anon-key"
+3. **Interactive Media Blocks**
+   - Supports Tweets, YouTube, Instagram, and native Images.
+   - Clicking on a media block (or Poll) opens a dedicated floating **Media Menu** allowing users to align the block (Left, Center, Right) or resize it (25%, 50%, 100%).
 
-# 2. CLOUDINARY (For Image Uploads)
-# Pass the resulting signed URLs into the editor's uploadImage prop.
-VITE_CLOUDINARY_CLOUD_NAME="your-cloud-name"
-VITE_CLOUDINARY_API_KEY="your-api-key"
-VITE_CLOUDINARY_API_SECRET="your-api-secret"
-
-# 3. OPENAI / LLM (For AI Sidebar)
-# Keep this on your backend! Do not expose this in Vite/Next.js frontend.
-OPENAI_API_KEY="sk-..."
-```
+4. **Source Pills (`/cite`)**
+   - A custom Markdown-style syntax parser. 
+   - Typing `/cite-("Google"|"google.com")` instantly replaces the text with a gorgeous, un-editable interactive UI pill.
 
 ---
 
-## Advanced Rendering (SSR/SSG)
-Axiom provides an AST renderer out of the box so you don't need to dangerously set HTML:
-```tsx
-import { AxiomJSONRenderer } from 'axiom-editor';
+## 🏗️ Architecture Under the Hood
 
-<AxiomJSONRenderer content={savedJsonData} />
-```
-
-## License
-MIT
+- **Tiptap Core**: Axiom leverages Tiptap's headless architecture. We define custom `Node` and `Mark` extensions in the `/src/extensions/` directory.
+- **React NodeViews**: Complex blocks like Polls, Tweets, and Callouts are rendered using Tiptap's `ReactNodeViewRenderer`. This allows us to put fully functional, interactive React components inside the rich-text editor!
+- **State Management**: The editor uses a unified `AxiomEditorContext` to distribute feature flags, AI handlers, and the active `Editor` instance to the Toolbar, Bubble Menu, and extensions.
