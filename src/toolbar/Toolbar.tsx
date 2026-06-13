@@ -32,8 +32,12 @@ export const AxiomToolbar: React.FC = () => {
   if (!editor || features?.toolbar === false) return null;
 
   const shouldShow = (key: string) => {
-    if (typeof features?.toolbar === 'object' && Array.isArray(features.toolbar.items)) {
-      return features.toolbar.items.includes(key);
+    if (features?.toolbar === false) return false;
+    if (Array.isArray(features?.toolbar)) {
+      return features.toolbar.includes(key);
+    }
+    if (typeof features?.toolbar === 'object' && Array.isArray((features.toolbar as any).items)) {
+      return (features.toolbar as any).items.includes(key);
     }
     return true; // Default show all if true or undefined
   };

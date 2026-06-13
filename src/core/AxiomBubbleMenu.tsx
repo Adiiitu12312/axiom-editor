@@ -59,7 +59,9 @@ export const AxiomBubbleMenu: React.FC<AxiomBubbleMenuProps> = ({ editor, onAskA
 
   if (!editor || features?.bubbleMenu === false) return null;
 
-  const allowedItems = typeof features?.bubbleMenu === 'object' ? features.bubbleMenu.items : undefined;
+  const allowedItems = Array.isArray(features?.bubbleMenu) 
+    ? features.bubbleMenu 
+    : (typeof features?.bubbleMenu === 'object' ? features.bubbleMenu.items : undefined);
   const isAllowed = (item: string) => {
     const allowedByBubbleMenu = !allowedItems || allowedItems.includes(item);
     if (!allowedByBubbleMenu) return false;

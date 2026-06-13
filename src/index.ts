@@ -4,6 +4,7 @@ export { AxiomJSONRenderer } from './AxiomJSONRenderer';
 export { useAxiomEditor } from './core/AxiomEditorContext';
 export { AxiomEditorProvider } from './core/AxiomEditorProvider';
 export { AxiomContent } from './core/AxiomEditorContent';
+export { generateAxiomHtml } from './AxiomHtmlRenderer';
 export { AxiomToolbar } from './toolbar/Toolbar';
 export { MediaMenu } from './toolbar/MediaMenu';
 

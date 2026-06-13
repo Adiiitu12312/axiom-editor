@@ -148,6 +148,54 @@ To completely customize the UI (the Toolbar, Slash Menu, AI Copilot, Bubble Menu
 
 ---
 
+## 📄 Rendering Content
+
+Axiom Editor passes its output in two formats via the `onChange` callback: `json` (Tiptap JSON) and `html` (Raw HTML string). Depending on your use case, Axiom provides three distinct ways to render this content on your frontend:
+
+### 1. The Premium JSON Renderer (`AxiomJSONRenderer`) **[Recommended]**
+This is the most powerful and secure way to render content. It takes the raw `JSONContent` from the editor and uses our custom React engine to reconstruct complex interactive blocks like Tweets, Instagram Posts, YouTube Videos, Polls, Callouts, and Table of Contents without relying on dangerously setting inner HTML.
+Importantly, it also completely strips hidden **"Stash"** blocks, ensuring internal notes never reach the reader's screen.
+
+```tsx
+import { AxiomJSONRenderer } from 'axiom-editor';
+
+// Inside your display component
+<AxiomJSONRenderer content={savedJsonContent} />
+```
+
+### 2. Standard HTML Rendering (`generateAxiomHtml`)
+If you want a lightweight solution without dynamic React components (Polls, TOC, etc.), you can generate clean, sanitized HTML from the editor's JSON output using our built-in `generateAxiomHtml` utility. This utility leverages `@tiptap/html` and accurately renders your custom features under the hood. You should still pass the result through DOMPurify for maximum security.
+
+```tsx
+import DOMPurify from 'dompurify';
+import { generateAxiomHtml } from 'axiom-editor';
+
+// Use the exported utility to convert JSON -> HTML server-side or client-side
+const rawHtml = generateAxiomHtml(savedJsonContent, featuresConfig);
+const displayHtml = DOMPurify.sanitize(rawHtml);
+
+// Inside your display component
+<div 
+  className="axiom-editor-canvas prose prose-invert max-w-none text-bone"
+  dangerouslySetInnerHTML={{ __html: displayHtml }} 
+/>
+```
+
+### 3. Raw JSON Data Handling
+If you are building native iOS/Android apps or a completely custom frontend, you can simply store the raw JSON and parse it manually on your client.
+
+```tsx
+<AxiomEditor 
+  initialContent={""} 
+  onChange={(json) => {
+    // Save `json` directly to your database
+    fetch('/api/save', { method: 'POST', body: JSON.stringify(json) })
+  }}
+/>
+```
+
+---
+
 ## 🛡️ Level 10 Security
 Axiom implements military-grade security for user-generated content:
 - **Zero-Bypass Disabling:** If a core feature (like `image` or `codeBlock`) is disabled in the config, the extension is stripped from the engine at runtime. Users cannot bypass this via pasted HTML, drag-and-drop, or Markdown shortcuts.

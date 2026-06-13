@@ -282,7 +282,7 @@ export const AxiomEditorProvider: React.FC<AxiomEditorProviderProps> = ({
     const handleImageUpload = async (e: Event) => {
       const customEvent = e as CustomEvent<{ file: File, position?: number }>;
       const { file, position } = customEvent.detail;
-      if (!file) return;
+      if (!file || features?.image === false) return;
 
       if (uploadImage) {
         setIsSaved(false);
@@ -310,7 +310,7 @@ export const AxiomEditorProvider: React.FC<AxiomEditorProviderProps> = ({
 
     window.addEventListener('axiom-image-upload', handleImageUpload);
     return () => window.removeEventListener('axiom-image-upload', handleImageUpload);
-  }, [editor, uploadImage]);
+  }, [editor, uploadImage, features?.image]);
 
   useEffect(() => {
     const handleToggle = () => setFindReplaceOpen(prev => !prev);
