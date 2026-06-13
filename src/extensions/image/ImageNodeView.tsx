@@ -228,4 +228,4 @@ export const ImageNodeView: React.FC<NodeViewProps> = ({ node, updateAttributes,
 };
  
  
- 
+  
