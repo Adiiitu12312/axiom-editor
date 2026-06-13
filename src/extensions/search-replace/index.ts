@@ -80,3 +80,4 @@ export const SearchAndReplace = Extension.create<any, SearchAndReplaceStorage>({
     ];
   },
 });
+ 
