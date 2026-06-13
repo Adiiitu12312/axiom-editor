@@ -67,8 +67,8 @@ export const AxiomToolbar: React.FC = () => {
         
         {/* Undo/Redo */}
         <div className="axiom-toolbar-group">
-          {shouldShow('undo') && <ToolbarButton icon={<Undo className="w-4 h-4" />} title="Undo" onClick={() => editor.chain().focus().undo().run()} disabled={!editor.can().undo()} />}
-          {shouldShow('redo') && <ToolbarButton icon={<Redo className="w-4 h-4" />} title="Redo" onClick={() => editor.chain().focus().redo().run()} disabled={!editor.can().redo()} />}
+          {shouldShow('undo') && features?.undo !== false && <ToolbarButton icon={<Undo className="w-4 h-4" />} title="Undo" onClick={() => editor.chain().focus().undo().run()} disabled={!editor.can().undo()} />}
+          {shouldShow('redo') && features?.redo !== false && <ToolbarButton icon={<Redo className="w-4 h-4" />} title="Redo" onClick={() => editor.chain().focus().redo().run()} disabled={!editor.can().redo()} />}
         </div>
 
         <div className="w-px h-6 axiom-border-separator hidden sm:block" />
@@ -78,7 +78,7 @@ export const AxiomToolbar: React.FC = () => {
           {shouldShow('bold') && features?.bold !== false && <ToolbarButton icon={<Bold className="w-4 h-4" />} title="Bold" active={editor.isActive('bold')} onClick={() => editor.chain().focus().toggleBold().run()} />}
           {shouldShow('italic') && features?.italic !== false && <ToolbarButton icon={<Italic className="w-4 h-4" />} title="Italic" active={editor.isActive('italic')} onClick={() => editor.chain().focus().toggleItalic().run()} />}
           {/* Underline Color Dropdown */}
-          {shouldShow('underline') && (
+          {shouldShow('underline') && features?.underline !== false && (
             <div ref={underlineColorRef} className="relative">
               <ToolbarButton 
                 icon={<UnderlineIcon className="w-4 h-4" />} 
@@ -117,7 +117,7 @@ export const AxiomToolbar: React.FC = () => {
           )}
 
           {/* Strike Color Dropdown */}
-          {shouldShow('strike') && (
+          {shouldShow('strike') && features?.strike !== false && (
             <div ref={strikeColorRef} className="relative">
               <ToolbarButton 
                 icon={<Strikethrough className="w-4 h-4" />} 
@@ -156,7 +156,7 @@ export const AxiomToolbar: React.FC = () => {
           )}
 
           {/* Text Color Dropdown */}
-          {shouldShow('textColor') && (
+          {shouldShow('textColor') && features?.textColor !== false && (
             <div ref={textColorRef} className="relative">
               <ToolbarButton 
                 icon={<Highlighter className="w-4 h-4" />} 

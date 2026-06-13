@@ -5,15 +5,20 @@ import type { HocuspocusProvider } from '@hocuspocus/provider';
 
 export interface AxiomFeaturesConfig {
   // Core Extensions (In-Depth Disabling)
-  image?: boolean;         // default: true
-  codeBlock?: boolean;     // default: true
-  blockquote?: boolean;    // default: true
-  link?: boolean;          // default: true
-  list?: boolean;          // default: true (bullet, ordered, task)
-  align?: boolean;         // default: true
-  heading?: boolean;       // default: true
+  undo?: boolean;          // default: true
+  redo?: boolean;          // default: true
   bold?: boolean;          // default: true
   italic?: boolean;        // default: true
+  underline?: boolean;     // default: true
+  strike?: boolean;        // default: true
+  textColor?: boolean;     // default: true
+  link?: boolean;          // default: true
+  heading?: boolean;       // default: true (handles h1, h2, h3)
+  blockquote?: boolean;    // default: true
+  codeBlock?: boolean;     // default: true
+  list?: boolean;          // default: true (handles bulletList, orderedList, taskList)
+  align?: boolean;         // default: true (handles alignLeft, alignCenter, alignRight)
+  image?: boolean;         // default: true
 
   // Premium Features
   slashCommands?: boolean; // default: true

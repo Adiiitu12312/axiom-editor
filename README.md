@@ -68,6 +68,11 @@ const features = {
   align: true,         // Allows text alignment
   bold: true,          
   italic: true,        
+  underline: true,
+  strike: true,
+  textColor: true,
+  undo: true,
+  redo: true,
 
   // UI Components
   toolbar: {

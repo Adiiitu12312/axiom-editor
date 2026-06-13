@@ -132,22 +132,29 @@ export const AxiomEditorProvider: React.FC<AxiomEditorProviderProps> = ({
   const extensions = React.useMemo(() => {
     const exts: any[] = [
       StarterKit.configure({ 
+        history: (features?.undo !== false || features?.redo !== false) ? {} : false,
         heading: features?.heading !== false ? { levels: [1, 2, 3] } : false,
         bold: features?.bold !== false ? {} : false,
         italic: features?.italic !== false ? {} : false,
         blockquote: features?.blockquote !== false ? {} : false,
         bulletList: features?.list !== false ? {} : false,
         orderedList: features?.list !== false ? {} : false,
-        strike: false,
+        strike: false, // Disabling StarterKit strike in favor of ColoredStrike
         codeBlock: false,
         horizontalRule: false,
       }),
       CustomHorizontalRuleExtension,
-      ColoredUnderline,
-      ColoredStrike,
-      CustomTextStyle,
-      Color,
     ];
+
+    if (features?.underline !== false) {
+      exts.push(ColoredUnderline);
+    }
+    if (features?.strike !== false) {
+      exts.push(ColoredStrike);
+    }
+    if (features?.textColor !== false) {
+      exts.push(CustomTextStyle, Color);
+    }
 
     if (features?.align !== false) {
       exts.push(TextAlign.configure({ types: ['heading', 'paragraph', 'image', 'youtube'] }));
