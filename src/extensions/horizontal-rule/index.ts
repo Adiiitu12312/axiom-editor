@@ -7,3 +7,4 @@ export const CustomHorizontalRuleExtension = HorizontalRule.extend({
     return ReactNodeViewRenderer(CustomHorizontalRule);
   },
 });
+ 
