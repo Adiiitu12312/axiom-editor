@@ -1,6 +1,6 @@
 {
   "name": "axiom-editor",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "A premium narrative architecture block editor built on Tiptap",
   "license": "MIT",
   "type": "module",
