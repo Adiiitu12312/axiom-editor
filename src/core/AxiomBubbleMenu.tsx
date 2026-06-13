@@ -363,3 +363,4 @@ export const AxiomBubbleMenu: React.FC<AxiomBubbleMenuProps> = ({ editor, onAskA
     </BubbleMenu>
   );
 };
+ 
