@@ -132,6 +132,7 @@ export const AxiomEditorProvider: React.FC<AxiomEditorProviderProps> = ({
   const extensions = React.useMemo(() => {
     const exts: any[] = [
       StarterKit.configure({ 
+        // @ts-expect-error: history is supported but sometimes missing from Partial<StarterKitOptions>
         history: (features?.undo !== false || features?.redo !== false) ? {} : false,
         heading: features?.heading !== false ? { levels: [1, 2, 3] } : false,
         bold: features?.bold !== false ? {} : false,
