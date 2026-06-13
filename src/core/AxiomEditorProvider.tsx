@@ -2,12 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useEditor } from '@tiptap/react';
 import type { JSONContent } from '@tiptap/core';
 import { NodeSelection } from '@tiptap/pm/state';
-import StarterKit from '@tiptap/starter-kit';
+import { StarterKit } from '@tiptap/starter-kit';
 import { common, createLowlight } from 'lowlight';
 import { TextStyle } from '@tiptap/extension-text-style';
 import { CustomCodeBlockExtension } from '../extensions/code-block';
-import TaskList from '@tiptap/extension-task-list';
-import TaskItem from '@tiptap/extension-task-item';
+import { TaskList } from '@tiptap/extension-task-list';
+import { TaskItem } from '@tiptap/extension-task-item';
 
 import 'highlight.js/styles/atom-one-dark.css'; // Add the CSS for syntax highlighting
 
@@ -31,8 +31,8 @@ const CustomTextStyle = TextStyle.extend({
 });
 
 import { Color } from '@tiptap/extension-color';
-import TextAlign from '@tiptap/extension-text-align';
-import Link from '@tiptap/extension-link';
+import { TextAlign } from '@tiptap/extension-text-align';
+import { Link } from '@tiptap/extension-link';
 import DOMPurify from 'dompurify';
 
 if (typeof window !== 'undefined') {
@@ -46,7 +46,7 @@ if (typeof window !== 'undefined') {
   });
 }
 
-import CharacterCount from '@tiptap/extension-character-count';
+import { CharacterCount } from '@tiptap/extension-character-count';
 
 import { AxiomEditorContext, AxiomFeaturesConfig } from './AxiomEditorContext';
 import { CustomImageExtension } from '../extensions/image';
@@ -59,8 +59,8 @@ import { SourceLinkExtension } from '../extensions/source-link';
 import { TableOfContentsExtension } from '../extensions/table-of-contents';
 import { SearchAndReplace } from '../extensions/search-replace';
 import { PollExtension } from '../extensions/poll';
-import Collaboration from '@tiptap/extension-collaboration';
-import CollaborationCursor from '@tiptap/extension-collaboration-cursor';
+import { Collaboration } from '@tiptap/extension-collaboration';
+import { CollaborationCursor } from '@tiptap/extension-collaboration-cursor';
 import { SlashMenuExtension } from '../extensions/slash-menu';
 import GlobalDragHandle from 'tiptap-extension-global-drag-handle';
 
