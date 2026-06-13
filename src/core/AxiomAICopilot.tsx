@@ -248,3 +248,4 @@ export const AxiomAICopilot = ({ editor, isOpen, onClose, selectedText }: AxiomA
     </div>
   );
 };
+ 
