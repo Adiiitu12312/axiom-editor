@@ -23,3 +23,4 @@ export const TableOfContentsExtension = Node.create({
     return ReactNodeViewRenderer(TOCNodeView);
   },
 });
+ 
