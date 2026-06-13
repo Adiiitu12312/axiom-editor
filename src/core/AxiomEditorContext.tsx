@@ -1,5 +1,7 @@
 import { createContext, useContext } from 'react';
 import { Editor } from '@tiptap/react';
+import type * as Y from 'yjs';
+import type { HocuspocusProvider } from '@hocuspocus/provider';
 
 export interface AxiomFeaturesConfig {
   slashCommands?: boolean; // default: true
@@ -18,8 +20,8 @@ export interface AxiomFeaturesConfig {
     instagram?: boolean;
   };
   collaboration?: {
-    document: any; // Y.Doc
-    provider: any; // WebRTC or Supabase provider
+    document: Y.Doc;
+    provider: HocuspocusProvider | any; // Supports Hocuspocus, WebRTC, or Supabase provider
     user: { name: string; color: string; };
   } | false;
   bubbleMenu?: boolean | {
