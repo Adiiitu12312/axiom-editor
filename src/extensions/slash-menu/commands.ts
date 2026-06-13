@@ -7,11 +7,13 @@ export interface CommandItemProps {
   description: string;
   icon: React.FC<any>;
   command: (props: { editor: Editor; range: Range }) => void;
+  id: string; // Add ID to filter easily
 }
 
-export const getSuggestionItems = ({ query }: { query: string }): CommandItemProps[] => {
+export const getSuggestionItems = ({ query, features }: { query: string; features?: any }): CommandItemProps[] => {
   const items: CommandItemProps[] = [
     {
+      id: 'h1',
       title: 'Heading 1',
       description: 'Big section heading.',
       icon: Heading1,
@@ -20,6 +22,7 @@ export const getSuggestionItems = ({ query }: { query: string }): CommandItemPro
       },
     },
     {
+      id: 'h2',
       title: 'Heading 2',
       description: 'Medium section heading.',
       icon: Heading2,
@@ -28,6 +31,7 @@ export const getSuggestionItems = ({ query }: { query: string }): CommandItemPro
       },
     },
     {
+      id: 'h3',
       title: 'Heading 3',
       description: 'Small section heading.',
       icon: Heading3,
@@ -36,6 +40,7 @@ export const getSuggestionItems = ({ query }: { query: string }): CommandItemPro
       },
     },
     {
+      id: 'bulletList',
       title: 'Bullet List',
       description: 'Create a simple bulleted list.',
       icon: List,
@@ -44,6 +49,7 @@ export const getSuggestionItems = ({ query }: { query: string }): CommandItemPro
       },
     },
     {
+      id: 'orderedList',
       title: 'Numbered List',
       description: 'Create a list with numbering.',
       icon: ListOrdered,
@@ -52,6 +58,7 @@ export const getSuggestionItems = ({ query }: { query: string }): CommandItemPro
       },
     },
     {
+      id: 'blockquote',
       title: 'Quote',
       description: 'Capture a quote.',
       icon: Quote,
@@ -60,6 +67,7 @@ export const getSuggestionItems = ({ query }: { query: string }): CommandItemPro
       },
     },
     {
+      id: 'taskList',
       title: 'Task List',
       description: 'Track tasks with a to-do list.',
       icon: CheckSquare,
@@ -68,6 +76,7 @@ export const getSuggestionItems = ({ query }: { query: string }): CommandItemPro
       },
     },
     {
+      id: 'codeBlock',
       title: 'Code Block',
       description: 'Capture a code snippet.',
       icon: Code,
@@ -76,6 +85,7 @@ export const getSuggestionItems = ({ query }: { query: string }): CommandItemPro
       },
     },
     {
+      id: 'callout',
       title: 'Callout',
       description: 'Highlight important information.',
       icon: MessageSquareWarning,
@@ -87,6 +97,7 @@ export const getSuggestionItems = ({ query }: { query: string }): CommandItemPro
       },
     },
     {
+      id: 'stash',
       title: 'Stash Note',
       description: 'Hidden journalist draft note.',
       icon: Archive,
@@ -98,6 +109,7 @@ export const getSuggestionItems = ({ query }: { query: string }): CommandItemPro
       },
     },
     {
+      id: 'sourceLink',
       title: 'Source Link',
       description: 'Add citation links/sources.',
       icon: Link,
@@ -111,6 +123,7 @@ export const getSuggestionItems = ({ query }: { query: string }): CommandItemPro
       },
     },
     {
+      id: 'tableOfContents',
       title: 'Table of Contents',
       description: 'Insert document table of contents outline.',
       icon: BookOpen,
@@ -121,6 +134,7 @@ export const getSuggestionItems = ({ query }: { query: string }): CommandItemPro
       },
     },
     {
+      id: 'findReplace',
       title: 'Find & Replace',
       description: 'Search and replace document text.',
       icon: Search,
@@ -130,6 +144,7 @@ export const getSuggestionItems = ({ query }: { query: string }): CommandItemPro
       },
     },
     {
+      id: 'aiCopilot',
       title: 'Ask AI',
       description: 'Ask AI to write, edit, or summarize.',
       icon: Sparkles,
@@ -139,6 +154,7 @@ export const getSuggestionItems = ({ query }: { query: string }): CommandItemPro
       },
     },
     {
+      id: 'poll',
       title: 'Poll',
       description: 'Insert an interactive poll.',
       icon: BarChart3,
@@ -150,7 +166,23 @@ export const getSuggestionItems = ({ query }: { query: string }): CommandItemPro
     },
   ];
 
-  return items.filter(item => item.title.toLowerCase().includes(query.toLowerCase())).slice(0, 10);
+  const filteredItems = items.filter(item => {
+    if (!features) return true;
+    if (item.id === 'h1' || item.id === 'h2' || item.id === 'h3') return features.heading !== false;
+    if (item.id === 'bulletList' || item.id === 'orderedList' || item.id === 'taskList') return features.list !== false;
+    if (item.id === 'blockquote') return features.blockquote !== false;
+    if (item.id === 'codeBlock') return features.codeBlock !== false;
+    if (item.id === 'callout') return features.callout !== false;
+    if (item.id === 'stash') return features.stash !== false;
+    if (item.id === 'sourceLink') return features.sourceLink !== false;
+    if (item.id === 'tableOfContents') return features.tableOfContents !== false;
+    if (item.id === 'findReplace') return features.findReplace !== false;
+    if (item.id === 'aiCopilot') return features.aiCopilot !== false;
+    if (item.id === 'poll') return features.poll !== false;
+    return true;
+  });
+
+  return filteredItems.filter(item => item.title.toLowerCase().includes(query.toLowerCase())).slice(0, 10);
 };
  
  

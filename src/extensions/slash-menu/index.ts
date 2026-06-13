@@ -17,6 +17,7 @@ export const SlashMenuExtension = Extension.create({
           props.command({ editor, range });
         },
       },
+      features: undefined as any,
     };
   },
 
@@ -25,7 +26,7 @@ export const SlashMenuExtension = Extension.create({
       Suggestion({
         editor: this.editor,
         ...this.options.suggestion,
-        items: getSuggestionItems,
+        items: ({ query }: { query: string }) => getSuggestionItems({ query, features: this.options.features }),
         render: () => {
           let component: ReactRenderer<any>;
           let popup: TippyInstance[];

@@ -39,12 +39,15 @@ export const AxiomToolbar: React.FC = () => {
   };
 
   const insertMedia = (type: 'link' | 'video' | 'tweet' | 'instagram') => {
+    if (type === 'link' && features?.link === false) return;
+    if (type !== 'link' && features?.embeds === false) return;
     setMediaModalInput('');
     setMediaModalType(type);
     setMediaModalOpen(true);
   };
 
   const handleImageClick = () => {
+    if (features?.image === false) return;
     const position = editor.state.selection.from;
     const input = document.createElement('input');
     input.type = 'file';

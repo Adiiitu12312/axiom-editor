@@ -56,7 +56,7 @@ export const AxiomContent: React.FC = () => {
         )}
       </div>
 
-      <AxiomSidebar />
+      {features?.aiCopilot !== false && <AxiomSidebar />}
 
       {features?.findReplace !== false && (
         <AxiomFindReplace 

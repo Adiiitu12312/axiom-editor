@@ -2,7 +2,7 @@ import React, { useCallback } from 'react';
 import { useAxiomEditor } from '../core/AxiomEditorContext';
 
 export const MediaMenu: React.FC = () => {
-  const { editor, mediaModalOpen, setMediaModalOpen, mediaModalType, mediaModalInput, setMediaModalInput } = useAxiomEditor();
+  const { editor, features, mediaModalOpen, setMediaModalOpen, mediaModalType, mediaModalInput, setMediaModalInput } = useAxiomEditor();
 
   const handleMediaModalSubmit = useCallback(() => {
     const inputVal = mediaModalInput.trim();
@@ -12,22 +12,31 @@ export const MediaMenu: React.FC = () => {
     }
 
     if (mediaModalType === 'link') {
+      if (features?.link === false) {
+        setMediaModalOpen(false);
+        return;
+      }
       let linkUrl = inputVal;
       if (!/^https?:\/\//i.test(linkUrl) && !/^mailto:/i.test(linkUrl) && !/^tel:/i.test(linkUrl)) {
         linkUrl = 'https://' + linkUrl;
       }
       editor.chain().focus().extendMarkRange('link').setLink({ href: linkUrl }).run();
-    } else if (mediaModalType === 'video') {
-      editor.chain().focus().setYoutubeVideo({ src: inputVal }).run();
-    } else if (mediaModalType === 'tweet') {
-      editor.chain().focus().insertContent({ type: 'tweet', attrs: { url: inputVal } }).run();
-    } else if (mediaModalType === 'instagram') {
-      editor.chain().focus().insertContent({ type: 'instagram', attrs: { url: inputVal } }).run();
+    } else {
+      const embedsEnabled = features?.embeds !== false;
+      const embedConfig = typeof features?.embeds === 'object' ? features.embeds : {};
+      
+      if (mediaModalType === 'video' && embedsEnabled && embedConfig.youtube !== false) {
+        editor.chain().focus().setYoutubeVideo({ src: inputVal }).run();
+      } else if (mediaModalType === 'tweet' && embedsEnabled && embedConfig.tweet !== false) {
+        editor.chain().focus().insertContent({ type: 'tweet', attrs: { url: inputVal } }).run();
+      } else if (mediaModalType === 'instagram' && embedsEnabled && embedConfig.instagram !== false) {
+        editor.chain().focus().insertContent({ type: 'instagram', attrs: { url: inputVal } }).run();
+      }
     }
 
     setMediaModalOpen(false);
     setMediaModalInput('');
-  }, [mediaModalInput, mediaModalType, editor, setMediaModalOpen, setMediaModalInput]);
+  }, [mediaModalInput, mediaModalType, editor, setMediaModalOpen, setMediaModalInput, features]);
 
   if (!mediaModalOpen) return null;
 

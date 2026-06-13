@@ -60,7 +60,21 @@ export const AxiomBubbleMenu: React.FC<AxiomBubbleMenuProps> = ({ editor, onAskA
   if (!editor || features?.bubbleMenu === false) return null;
 
   const allowedItems = typeof features?.bubbleMenu === 'object' ? features.bubbleMenu.items : undefined;
-  const isAllowed = (item: string) => !allowedItems || allowedItems.includes(item);
+  const isAllowed = (item: string) => {
+    const allowedByBubbleMenu = !allowedItems || allowedItems.includes(item);
+    if (!allowedByBubbleMenu) return false;
+    
+    // Deep block check
+    if (item === 'bold' && features?.bold === false) return false;
+    if (item === 'italic' && features?.italic === false) return false;
+    if (item === 'underline' && features?.underline === false) return false;
+    if (item === 'strike' && features?.strike === false) return false;
+    if (item === 'link' && features?.link === false) return false;
+    if (item === 'color' && features?.textColor === false) return false;
+    if (item === 'ai' && features?.aiCopilot === false) return false;
+    
+    return true;
+  };
 
   // Duplicate current selected block
   const handleDuplicate = () => {
@@ -85,19 +99,19 @@ export const AxiomBubbleMenu: React.FC<AxiomBubbleMenuProps> = ({ editor, onAskA
   const handleTurnInto = (type: string) => {
     if (type === 'paragraph') {
       editor.chain().focus().setParagraph().run();
-    } else if (type === 'h1') {
+    } else if (type === 'h1' && features?.heading !== false) {
       editor.chain().focus().setNode('heading', { level: 1 }).run();
-    } else if (type === 'h2') {
+    } else if (type === 'h2' && features?.heading !== false) {
       editor.chain().focus().setNode('heading', { level: 2 }).run();
-    } else if (type === 'h3') {
+    } else if (type === 'h3' && features?.heading !== false) {
       editor.chain().focus().setNode('heading', { level: 3 }).run();
-    } else if (type === 'bulletList') {
+    } else if (type === 'bulletList' && features?.list !== false) {
       editor.chain().focus().toggleBulletList().run();
-    } else if (type === 'orderedList') {
+    } else if (type === 'orderedList' && features?.list !== false) {
       editor.chain().focus().toggleOrderedList().run();
-    } else if (type === 'codeBlock') {
+    } else if (type === 'codeBlock' && features?.codeBlock !== false) {
       editor.chain().focus().toggleCodeBlock().run();
-    } else if (type === 'callout') {
+    } else if (type === 'callout' && features?.callout !== false) {
       editor.chain().focus().insertContent({
         type: 'callout',
         content: [{ type: 'paragraph' }]
@@ -106,9 +120,22 @@ export const AxiomBubbleMenu: React.FC<AxiomBubbleMenuProps> = ({ editor, onAskA
     setShowTurnIntoMenu(false);
   };
 
+  const availableTurnIntoOptions = TURN_INTO_OPTIONS.filter(opt => {
+    if (opt.value === 'paragraph') return true;
+    if (opt.value.startsWith('h') && features?.heading === false) return false;
+    if ((opt.value === 'bulletList' || opt.value === 'orderedList') && features?.list === false) return false;
+    if (opt.value === 'codeBlock' && features?.codeBlock === false) return false;
+    if (opt.value === 'callout' && features?.callout === false) return false;
+    return true;
+  });
+
   // Set link URL
   const handleSetLink = (e: React.FormEvent) => {
     e.preventDefault();
+    if (features?.link === false) {
+      setShowLinkInput(false);
+      return;
+    }
     if (linkUrl) {
       editor.chain().focus().extendMarkRange('link').setLink({ href: linkUrl }).run();
     } else {
@@ -205,7 +232,7 @@ export const AxiomBubbleMenu: React.FC<AxiomBubbleMenuProps> = ({ editor, onAskA
 
                 {showTurnIntoMenu && (
                   <div className="absolute left-0 top-full mt-1.5 axiom-bg-card border axiom-border rounded-xl shadow-2xl p-1.5 flex flex-col gap-1 w-36 z-50">
-                    {TURN_INTO_OPTIONS.map((opt) => (
+                    {availableTurnIntoOptions.map((opt) => (
                       <button
                         key={opt.value}
                         onClick={() => handleTurnInto(opt.value)}
