@@ -2,10 +2,20 @@ import { mergeAttributes, Node, nodePasteRule } from '@tiptap/core';
 import { ReactNodeViewRenderer } from '@tiptap/react';
 import { InstagramNodeView } from './InstagramNodeView';
 
-export const InstagramExtension = Node.create({
+export interface InstagramOptions {
+  pasteRules: boolean;
+}
+
+export const InstagramExtension = Node.create<InstagramOptions>({
   name: 'instagram',
   group: 'block',
   atom: true,
+
+  addOptions() {
+    return {
+      pasteRules: true,
+    };
+  },
 
   addAttributes() {
     return {
@@ -48,6 +58,7 @@ export const InstagramExtension = Node.create({
   },
 
   addPasteRules() {
+    if (!this.options.pasteRules) return [];
     return [
       nodePasteRule({
         find: /https?:\/\/(?:www\.)?instagram\.com\/(?:p|reel|tv)\/([a-zA-Z0-9_-]+)(?:\S*)?/gi,

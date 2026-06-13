@@ -66,12 +66,12 @@ export const CommandList = forwardRef((props: CommandListProps, ref) => {
   }
 
   return (
-    <div className="bg-obsidian border border-smoke/60 shadow-2xl rounded-xl overflow-hidden flex flex-col min-w-[240px] max-h-[280px]">
+    <div className="axiom-bg-card border axiom-border shadow-2xl rounded-xl overflow-hidden flex flex-col min-w-[240px] max-h-[280px]">
       {/* Search Header */}
-      <div className="px-3.5 py-2 border-b border-smoke/20 bg-charcoal/20 flex items-center gap-2 select-none text-[11px] text-steel">
-        <span className="font-semibold text-amber">/</span>
+      <div className="px-3.5 py-2 border-b axiom-border axiom-bg flex items-center gap-2 select-none text-[11px] axiom-text-muted">
+        <span className="font-semibold" style={{ color: 'var(--axiom-primary)' }}>/</span>
         {props.query ? (
-          <span className="truncate">Searching: <strong className="text-bone">"{props.query}"</strong></span>
+          <span className="truncate">Searching: <strong className="axiom-text">"{props.query}"</strong></span>
         ) : (
           <span>Type to search...</span>
         )}
@@ -87,16 +87,17 @@ export const CommandList = forwardRef((props: CommandListProps, ref) => {
           return (
             <button
               className={`w-full flex items-center gap-2.5 px-3.5 py-1.5 text-left transition-colors
-                ${index === selectedIndex ? 'bg-amber/10 text-amber' : 'text-bone hover:bg-charcoal/50 hover:text-amber/80'}`}
+                ${index === selectedIndex ? 'axiom-button-active' : 'axiom-text hover:opacity-80'}`}
               key={index}
               onClick={() => selectItem(index)}
+              style={index === selectedIndex ? { color: 'var(--axiom-primary)' } : {}}
             >
-              <div className="flex items-center justify-center w-6 h-6 rounded bg-charcoal/30 border border-smoke/30 shrink-0">
+              <div className="flex items-center justify-center w-6 h-6 rounded axiom-bg border axiom-border shrink-0">
                 <Icon className="w-3.5 h-3.5" />
               </div>
               <div className="flex flex-col">
                 <span className="font-semibold text-xs font-display tracking-wide">{item.title}</span>
-                <span className="text-[10px] text-steel leading-tight">{item.description}</span>
+                <span className="text-[10px] axiom-text-muted leading-tight">{item.description}</span>
               </div>
             </button>
           );

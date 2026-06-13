@@ -97,67 +97,74 @@ export const AxiomEditorProvider: React.FC<AxiomEditorProviderProps> = ({
   const [aiSelectedText, setAISelectedText] = useState('');
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
-  const extensions: any[] = [
-    StarterKit.configure({ 
-      heading: { levels: [1, 2, 3] },
-      strike: false,
-      codeBlock: false,
-      horizontalRule: false,
-    }),
-    CustomHorizontalRuleExtension,
-    ColoredUnderline,
-    ColoredStrike,
-    CustomTextStyle,
-    Color,
-    TextAlign.configure({ types: ['heading', 'paragraph', 'image', 'youtube'] }),
-    Link.configure({ 
-      openOnClick: false, 
-      HTMLAttributes: { 
-        class: 'text-amber hover:text-amber/80 transition-colors underline underline-offset-4 cursor-pointer',
-        rel: 'noopener noreferrer'
-      },
-      validate: href => /^https?:\/\//.test(href) || /^mailto:/.test(href)
-    }),
-    CustomImageExtension.configure({ inline: false }),
-    CustomCodeBlockExtension.configure({ lowlight }),
-    TaskList,
-    TaskItem.configure({ nested: true }),
-  ];
-
-  if (features?.dragDrop !== false) {
-    extensions.push(GlobalDragHandle.configure({
-      dragHandleWidth: 20,
-      scrollTreshold: 100,
-      customIcon: `<svg viewBox="0 0 14 24" width="14" height="24" stroke="currentColor" fill="currentColor" stroke-width="0"><path d="M4 6.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm0 5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm0 5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm5-10a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm0 5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm0 5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" /></svg>`
-    }));
-  }
-
-  if (features?.slashCommands !== false) extensions.push(SlashMenuExtension);
-  if (features?.characterCount !== false) extensions.push(CharacterCount);
-  if (features?.tableOfContents !== false) extensions.push(TableOfContentsExtension);
-  if (features?.callout !== false) extensions.push(CalloutExtension);
-  if (features?.stash !== false) extensions.push(StashExtension);
-  if (features?.findReplace !== false) extensions.push(SearchAndReplace);
-  if (features?.sourceLink !== false) extensions.push(SourceLinkExtension);
-  if (features?.poll !== false) extensions.push(PollExtension);
-
-  const embedsEnabled = features?.embeds !== false;
-  const embedConfig = typeof features?.embeds === 'object' ? features.embeds : {};
-  if (embedsEnabled && embedConfig.youtube !== false) extensions.push(CustomYoutubeExtension.configure({ inline: false }));
-  if (embedsEnabled && embedConfig.tweet !== false) extensions.push(TweetExtension);
-  if (embedsEnabled && embedConfig.instagram !== false) extensions.push(InstagramExtension);
-
-  if (features?.collaboration) {
-    extensions.push(
-      Collaboration.configure({
-        document: features.collaboration.document,
+  const extensions = React.useMemo(() => {
+    const exts: any[] = [
+      StarterKit.configure({ 
+        heading: { levels: [1, 2, 3] },
+        strike: false,
+        codeBlock: false,
+        horizontalRule: false,
       }),
-      CollaborationCursor.configure({
-        provider: features.collaboration.provider,
-        user: features.collaboration.user,
-      })
-    );
-  }
+      CustomHorizontalRuleExtension,
+      ColoredUnderline,
+      ColoredStrike,
+      CustomTextStyle,
+      Color,
+      TextAlign.configure({ types: ['heading', 'paragraph', 'image', 'youtube'] }),
+      Link.configure({ 
+        openOnClick: false, 
+        HTMLAttributes: { 
+          class: 'text-amber hover:text-amber/80 transition-colors underline underline-offset-4 cursor-pointer',
+          rel: 'noopener noreferrer'
+        },
+        validate: href => /^https?:\/\//.test(href) || /^mailto:/.test(href)
+      }),
+      CustomImageExtension.configure({ inline: false }),
+      CustomCodeBlockExtension.configure({ lowlight }),
+      TaskList,
+      TaskItem.configure({ nested: true }),
+    ];
+
+    if (features?.dragDrop !== false) {
+      exts.push(GlobalDragHandle.configure({
+        dragHandleWidth: 20,
+        scrollTreshold: 100,
+        customIcon: `<svg viewBox="0 0 14 24" width="14" height="24" stroke="currentColor" fill="currentColor" stroke-width="0"><path d="M4 6.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm0 5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm0 5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm5-10a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm0 5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zm0 5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z" /></svg>`
+      }));
+    }
+
+    if (features?.slashCommands !== false) exts.push(SlashMenuExtension);
+    if (features?.characterCount !== false) exts.push(CharacterCount);
+    if (features?.tableOfContents !== false) exts.push(TableOfContentsExtension);
+    if (features?.callout !== false) exts.push(CalloutExtension);
+    if (features?.stash !== false) exts.push(StashExtension);
+    if (features?.findReplace !== false) exts.push(SearchAndReplace);
+    const pasteRulesEmbeds = typeof features?.pasteRules === 'object' ? features.pasteRules.embeds !== false : features?.pasteRules !== false;
+    const pasteRulesSourceLink = typeof features?.pasteRules === 'object' ? features.pasteRules.sourceLink !== false : features?.pasteRules !== false;
+
+    if (features?.sourceLink !== false) exts.push(SourceLinkExtension.configure({ pasteRules: pasteRulesSourceLink }));
+    if (features?.poll !== false) exts.push(PollExtension);
+
+    const embedsEnabled = features?.embeds !== false;
+    const embedConfig = typeof features?.embeds === 'object' ? features.embeds : {};
+    if (embedsEnabled && embedConfig.youtube !== false) exts.push(CustomYoutubeExtension.configure({ inline: false, pasteRules: pasteRulesEmbeds }));
+    if (embedsEnabled && embedConfig.tweet !== false) exts.push(TweetExtension.configure({ pasteRules: pasteRulesEmbeds }));
+    if (embedsEnabled && embedConfig.instagram !== false) exts.push(InstagramExtension.configure({ pasteRules: pasteRulesEmbeds }));
+
+    if (features?.collaboration) {
+      exts.push(
+        Collaboration.configure({
+          document: features.collaboration.document,
+        }),
+        CollaborationCursor.configure({
+          provider: features.collaboration.provider,
+          user: features.collaboration.user,
+        })
+      );
+    }
+    
+    return exts;
+  }, [features]);
 
   const editor = useEditor({
     extensions,

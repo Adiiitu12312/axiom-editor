@@ -25,6 +25,11 @@ export interface AxiomFeaturesConfig {
   bubbleMenu?: boolean | {
     items?: string[]; // e.g. ['bold', 'italic', 'h1', 'image']
   };
+  toolbar?: boolean;       // default: true
+  pasteRules?: boolean | {
+    embeds?: boolean;      // Disables auto-embeds for youtube, tweet, instagram
+    sourceLink?: boolean;  // Disables regex text formatting for source pills
+  };
 }
 
 export interface AxiomEditorContextType {

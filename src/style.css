@@ -177,3 +177,60 @@
   background-size: 200% 100%;
   animation: axiom-shimmer 1.5s infinite linear;
 }
+
+/* Safe Layout Classes for Toolbar to prevent Tailwind purge issues */
+.axiom-toolbar-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  border-radius: 0.75rem;
+  position: sticky;
+  top: 1rem;
+  z-index: 20;
+  flex-wrap: wrap;
+}
+
+.axiom-toolbar-group {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-wrap: wrap;
+}
+
+.axiom-toolbar-metrics {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-left: auto;
+}
+
+/* Component Utilities for Theming */
+.axiom-bg-overlay {
+  background-color: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(4px);
+}
+
+.axiom-input {
+  background-color: var(--axiom-bg-card, #171717);
+  border: 1px solid var(--axiom-border, #404040);
+  color: var(--axiom-text, #f5f5f5);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.axiom-input:focus {
+  outline: none;
+  border-color: var(--axiom-primary, #f59e0b);
+  box-shadow: 0 0 0 2px rgba(245, 158, 11, 0.2);
+}
+
+.axiom-primary-bg {
+  background-color: var(--axiom-primary, #f59e0b);
+  color: var(--axiom-primary-text, #09090b);
+  transition: opacity 0.2s, transform 0.1s;
+}
+.axiom-primary-bg:hover {
+  opacity: 0.9;
+}
+.axiom-primary-bg:active {
+  transform: scale(0.98);
+}

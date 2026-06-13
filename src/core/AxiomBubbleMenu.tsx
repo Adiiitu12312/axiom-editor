@@ -143,10 +143,18 @@ export const AxiomBubbleMenu: React.FC<AxiomBubbleMenuProps> = ({ editor, onAskA
     setShowColorMenu(false);
   };
 
+  const shouldShow = ({ state }: any) => {
+    const { selection } = state;
+    // Hide if nothing is selected or if a custom Node (like Image, Poll, Embed) is selected directly
+    const isNodeSelection = 'node' in selection;
+    return !selection.empty && !isNodeSelection;
+  };
+
   return (
     <BubbleMenu
       editor={editor}
-      className="flex items-center gap-1 bg-[#141416]/95 border border-smoke/50 rounded-xl shadow-2xl p-1.5 backdrop-blur-md text-bone text-xs font-medium z-50 select-none"
+      shouldShow={shouldShow}
+      className="flex items-center gap-1 axiom-bg-card border axiom-border rounded-xl shadow-2xl p-1.5 backdrop-blur-md axiom-text text-xs font-medium z-50 select-none"
     >
       {showLinkInput ? (
         <form onSubmit={handleSetLink} className="flex items-center gap-2 px-2 py-0.5">
@@ -155,13 +163,13 @@ export const AxiomBubbleMenu: React.FC<AxiomBubbleMenuProps> = ({ editor, onAskA
             placeholder="Paste link (https://...)"
             value={linkUrl}
             onChange={(e) => setLinkUrl(e.target.value)}
-            className="bg-[#2a2a32]/60 border border-smoke/30 rounded-md px-2 py-1 text-xs text-bone focus:outline-none focus:border-amber/80 w-44"
+            className="axiom-input rounded-md px-2 py-1 text-xs focus:outline-none w-44"
             autoFocus
           />
-          <button type="submit" className="px-2.5 py-1 bg-amber text-obsidian rounded-md font-semibold text-[11px] hover:bg-amber/90 transition-colors">
+          <button type="submit" className="px-2.5 py-1 axiom-primary-bg rounded-md font-semibold text-[11px] transition-colors">
             Apply
           </button>
-          <button type="button" onClick={() => setShowLinkInput(false)} className="text-steel hover:text-bone text-[11px] px-1">
+          <button type="button" onClick={() => setShowLinkInput(false)} className="axiom-text-muted hover:opacity-80 text-[11px] px-1 transition-opacity">
             Cancel
           </button>
         </form>
@@ -171,7 +179,7 @@ export const AxiomBubbleMenu: React.FC<AxiomBubbleMenuProps> = ({ editor, onAskA
           {isAllowed('ai') && onAskAI && (
             <button
               onClick={handleAskAIClick}
-              className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-purple-400 hover:text-purple-300 hover:bg-[#8b5cf6]/10 transition-colors font-semibold select-none"
+              className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg axiom-primary-text-muted hover:opacity-80 transition-opacity font-semibold select-none"
               title="Ask AI"
             >
               <Sparkles size={13} className="animate-pulse" />
@@ -181,14 +189,14 @@ export const AxiomBubbleMenu: React.FC<AxiomBubbleMenuProps> = ({ editor, onAskA
 
           {isAllowed('turnInto') && (
             <>
-              <div className="w-px h-4 bg-smoke/25 mx-1" />
+              <div className="w-px h-4 axiom-border-separator mx-1" />
               <div className="relative">
                 <button
                   onClick={() => {
                     setShowTurnIntoMenu(!showTurnIntoMenu);
                     setShowColorMenu(false);
                   }}
-                  className="flex items-center gap-1 px-2 py-1.5 rounded-lg hover:bg-charcoal/50 text-steel hover:text-bone transition-colors"
+                  className="flex items-center gap-1 px-2 py-1.5 rounded-lg hover:bg-black/20 axiom-text-muted hover:axiom-text transition-colors"
                   title="Turn Block Into"
                 >
                   <span>Turn Into</span>
@@ -196,12 +204,12 @@ export const AxiomBubbleMenu: React.FC<AxiomBubbleMenuProps> = ({ editor, onAskA
                 </button>
 
                 {showTurnIntoMenu && (
-                  <div className="absolute left-0 top-full mt-1.5 bg-[#141416] border border-smoke/50 rounded-xl shadow-2xl p-1.5 flex flex-col gap-1 w-36 z-50">
+                  <div className="absolute left-0 top-full mt-1.5 axiom-bg-card border axiom-border rounded-xl shadow-2xl p-1.5 flex flex-col gap-1 w-36 z-50">
                     {TURN_INTO_OPTIONS.map((opt) => (
                       <button
                         key={opt.value}
                         onClick={() => handleTurnInto(opt.value)}
-                        className="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-charcoal/50 text-steel hover:text-bone text-xs transition-colors"
+                        className="w-full text-left px-2.5 py-1.5 rounded-lg hover:bg-black/20 axiom-text-muted hover:axiom-text text-xs transition-colors"
                       >
                         {opt.name}
                       </button>
@@ -213,13 +221,13 @@ export const AxiomBubbleMenu: React.FC<AxiomBubbleMenuProps> = ({ editor, onAskA
           )}
 
           {(isAllowed('bold') || isAllowed('italic') || isAllowed('underline') || isAllowed('strike') || isAllowed('link')) && (
-            <div className="w-px h-4 bg-smoke/25 mx-1" />
+            <div className="w-px h-4 axiom-border-separator mx-1" />
           )}
 
           {isAllowed('bold') && (
             <button
               onClick={() => editor.chain().focus().toggleBold().run()}
-              className={`p-1.5 rounded-lg transition-colors hover:bg-charcoal/50 ${editor.isActive('bold') ? 'text-amber' : 'text-steel hover:text-bone'}`}
+              className={`p-1.5 rounded-lg transition-colors hover:bg-black/20 ${editor.isActive('bold') ? 'axiom-button-active' : 'axiom-button-inactive'}`}
               title="Bold"
             >
               <Bold size={13} />
@@ -229,7 +237,7 @@ export const AxiomBubbleMenu: React.FC<AxiomBubbleMenuProps> = ({ editor, onAskA
           {isAllowed('italic') && (
             <button
               onClick={() => editor.chain().focus().toggleItalic().run()}
-              className={`p-1.5 rounded-lg transition-colors hover:bg-charcoal/50 ${editor.isActive('italic') ? 'text-amber' : 'text-steel hover:text-bone'}`}
+              className={`p-1.5 rounded-lg transition-colors hover:bg-black/20 ${editor.isActive('italic') ? 'axiom-button-active' : 'axiom-button-inactive'}`}
               title="Italic"
             >
               <Italic size={13} />
@@ -239,7 +247,7 @@ export const AxiomBubbleMenu: React.FC<AxiomBubbleMenuProps> = ({ editor, onAskA
           {isAllowed('underline') && (
             <button
               onClick={() => editor.chain().focus().toggleUnderline().run()}
-              className={`p-1.5 rounded-lg transition-colors hover:bg-charcoal/50 ${editor.isActive('underline') ? 'text-amber' : 'text-steel hover:text-bone'}`}
+              className={`p-1.5 rounded-lg transition-colors hover:bg-black/20 ${editor.isActive('underline') ? 'axiom-button-active' : 'axiom-button-inactive'}`}
               title="Underline"
             >
               <Underline size={13} />
@@ -249,7 +257,7 @@ export const AxiomBubbleMenu: React.FC<AxiomBubbleMenuProps> = ({ editor, onAskA
           {isAllowed('strike') && (
             <button
               onClick={() => editor.chain().focus().toggleStrike().run()}
-              className={`p-1.5 rounded-lg transition-colors hover:bg-charcoal/50 ${editor.isActive('strike') ? 'text-amber' : 'text-steel hover:text-bone'}`}
+              className={`p-1.5 rounded-lg transition-colors hover:bg-black/20 ${editor.isActive('strike') ? 'axiom-button-active' : 'axiom-button-inactive'}`}
               title="Strikethrough"
             >
               <Strikethrough size={13} />
@@ -263,7 +271,7 @@ export const AxiomBubbleMenu: React.FC<AxiomBubbleMenuProps> = ({ editor, onAskA
                 setShowColorMenu(false);
                 setShowTurnIntoMenu(false);
               }}
-              className={`p-1.5 rounded-lg transition-colors hover:bg-charcoal/50 ${editor.isActive('link') ? 'text-amber' : 'text-steel hover:text-bone'}`}
+              className={`p-1.5 rounded-lg transition-colors hover:bg-black/20 ${editor.isActive('link') ? 'axiom-button-active' : 'axiom-button-inactive'}`}
               title="Hyperlink"
             >
               <LinkIcon size={13} />
@@ -277,24 +285,24 @@ export const AxiomBubbleMenu: React.FC<AxiomBubbleMenuProps> = ({ editor, onAskA
                   setShowColorMenu(!showColorMenu);
                   setShowTurnIntoMenu(false);
                 }}
-                className="p-1.5 rounded-lg transition-colors hover:bg-charcoal/50 text-steel hover:text-bone"
+                className="p-1.5 rounded-lg transition-colors hover:bg-black/20 axiom-text-muted hover:axiom-text"
                 title="Text & Highlight Color"
               >
                 <Palette size={13} />
               </button>
 
               {showColorMenu && (
-                <div className="absolute left-1/2 -translate-x-1/2 top-full mt-1.5 bg-[#141416] border border-smoke/50 rounded-xl shadow-2xl p-2.5 flex flex-col gap-2.5 w-44 z-50 text-left">
+                <div className="absolute left-1/2 -translate-x-1/2 top-full mt-1.5 axiom-bg-card border axiom-border rounded-xl shadow-2xl p-2.5 flex flex-col gap-2.5 w-44 z-50 text-left">
                   {/* Text Colors */}
                   <div>
-                    <span className="text-[9px] font-bold text-steel uppercase tracking-wider block px-1 mb-1.5">Text Color</span>
+                    <span className="text-[9px] font-bold axiom-text-muted uppercase tracking-wider block px-1 mb-1.5">Text Color</span>
                     <div className="grid grid-cols-6 gap-1">
                       {TEXT_COLORS.map((color) => (
                         <button
                           key={color.value}
                           onClick={() => handleTextColor(color.value)}
-                          className="w-5 h-5 rounded-full border border-smoke/20 cursor-pointer flex items-center justify-center hover:scale-110 active:scale-95 transition-transform"
-                          style={{ backgroundColor: color.value === '#e4e4e7' ? '#1c1c1f' : 'transparent' }}
+                          className="w-5 h-5 rounded-full border axiom-border cursor-pointer flex items-center justify-center hover:scale-110 active:scale-95 transition-transform"
+                          style={{ backgroundColor: color.value === '#e4e4e7' ? 'var(--axiom-bg)' : 'transparent' }}
                           title={color.name}
                         >
                           <span className="w-3.5 h-3.5 rounded-full" style={{ backgroundColor: color.value }} />
@@ -305,17 +313,17 @@ export const AxiomBubbleMenu: React.FC<AxiomBubbleMenuProps> = ({ editor, onAskA
 
                   {/* Background Highlights */}
                   <div>
-                    <span className="text-[9px] font-bold text-steel uppercase tracking-wider block px-1 mb-1.5">Highlight</span>
+                    <span className="text-[9px] font-bold axiom-text-muted uppercase tracking-wider block px-1 mb-1.5">Highlight</span>
                     <div className="grid grid-cols-6 gap-1">
                       {BG_COLORS.map((bg) => (
                         <button
                           key={bg.value}
                           onClick={() => handleBgColor(bg.value)}
-                          className="w-5 h-5 rounded border border-smoke/20 cursor-pointer flex items-center justify-center hover:scale-110 active:scale-95 transition-transform bg-[#1c1c1f]"
+                          className="w-5 h-5 rounded border axiom-border cursor-pointer flex items-center justify-center hover:scale-110 active:scale-95 transition-transform axiom-bg"
                           title={bg.name}
                         >
                           <span 
-                            className="w-3.5 h-3.5 rounded border border-smoke/10" 
+                            className="w-3.5 h-3.5 rounded border border-white/10" 
                             style={{ backgroundColor: bg.value === 'transparent' ? '#ff5f56' : bg.value }} 
                           />
                         </button>
@@ -328,13 +336,13 @@ export const AxiomBubbleMenu: React.FC<AxiomBubbleMenuProps> = ({ editor, onAskA
           )}
 
           {(isAllowed('duplicate') || isAllowed('delete')) && (
-            <div className="w-px h-4 bg-smoke/25 mx-1" />
+            <div className="w-px h-4 axiom-border-separator mx-1" />
           )}
 
           {isAllowed('duplicate') && (
             <button
               onClick={handleDuplicate}
-              className="p-1.5 rounded-lg transition-colors hover:bg-charcoal/50 text-steel hover:text-bone"
+              className="p-1.5 rounded-lg transition-colors hover:bg-black/20 axiom-text-muted hover:axiom-text"
               title="Duplicate Block"
             >
               <Copy size={13} />
@@ -344,7 +352,7 @@ export const AxiomBubbleMenu: React.FC<AxiomBubbleMenuProps> = ({ editor, onAskA
           {isAllowed('delete') && (
             <button
               onClick={handleDelete}
-              className="p-1.5 rounded-lg transition-colors hover:bg-charcoal/50 text-steel hover:text-[#ff5f56]"
+              className="p-1.5 rounded-lg transition-colors hover:bg-black/20 axiom-text-muted hover:text-red-500"
               title="Delete Block"
             >
               <Trash2 size={13} />

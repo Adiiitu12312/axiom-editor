@@ -39,7 +39,7 @@ export const AxiomContent: React.FC = () => {
   return (
     <div 
       style={inlineStyles}
-      className="flex w-full overflow-hidden relative axiom-bg axiom-border rounded-xl transition-all duration-300"
+      className="flex w-full relative axiom-bg axiom-border rounded-xl transition-all duration-300"
     >
       <div 
         className="flex-1 axiom-editor-canvas relative overflow-y-auto overflow-x-hidden shadow-inner custom-scrollbar min-h-0 h-full axiom-bg axiom-text"
@@ -54,24 +54,25 @@ export const AxiomContent: React.FC = () => {
             }}
           />
         )}
-        {features?.findReplace !== false && (
-          <AxiomFindReplace 
-            editor={editor} 
-            isOpen={findReplaceOpen} 
-            onClose={() => setFindReplaceOpen(false)} 
-          />
-        )}
-        {features?.aiCopilot !== false && (
-          <AxiomAICopilot 
-            editor={editor}
-            isOpen={aiCopilotOpen}
-            onClose={() => setAICopilotOpen(false)}
-            selectedText={aiSelectedText}
-          />
-        )}
       </div>
 
       <AxiomSidebar />
+
+      {features?.findReplace !== false && (
+        <AxiomFindReplace 
+          editor={editor} 
+          isOpen={findReplaceOpen} 
+          onClose={() => setFindReplaceOpen(false)} 
+        />
+      )}
+      {features?.aiCopilot !== false && (
+        <AxiomAICopilot 
+          editor={editor}
+          isOpen={aiCopilotOpen}
+          onClose={() => setAICopilotOpen(false)}
+          selectedText={aiSelectedText}
+        />
+      )}
     </div>
   );
 };

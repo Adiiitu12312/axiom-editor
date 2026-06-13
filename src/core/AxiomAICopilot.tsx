@@ -156,18 +156,18 @@ export const AxiomAICopilot = ({ editor, isOpen, onClose, selectedText }: AxiomA
   return (
     <div 
       ref={panelRef}
-      className="absolute top-16 right-4 z-50 bg-[#141416]/95 border border-[#8b5cf6]/40 rounded-xl shadow-2xl p-4 backdrop-blur-md text-bone flex flex-col gap-3 w-80 select-none border-t-2"
+      className="absolute top-16 right-4 z-50 axiom-bg-card border axiom-border rounded-xl shadow-2xl p-4 backdrop-blur-md axiom-text flex flex-col gap-3 w-80 select-none"
       contentEditable={false}
       onMouseDown={(e) => e.stopPropagation()}
     >
       {/* Header */}
-      <div className="flex items-center justify-between border-b border-smoke/10 pb-2">
-        <span className="font-semibold text-xs text-purple-400 flex items-center gap-1.5 font-display">
-          <Sparkles size={13} className="text-purple-400 animate-pulse" />
+      <div className="flex items-center justify-between border-b axiom-border pb-2">
+        <span className="font-semibold text-xs flex items-center gap-1.5 font-display" style={{ color: 'var(--axiom-primary)' }}>
+          <Sparkles size={13} className="animate-pulse" style={{ color: 'var(--axiom-primary)' }} />
           Axiom AI Assistant
         </span>
         <div className="flex items-center gap-2">
-          <button onClick={onClose} className="text-steel hover:text-bone transition-colors cursor-pointer">
+          <button onClick={onClose} className="axiom-text-muted hover:opacity-80 transition-opacity cursor-pointer">
             <X size={14} />
           </button>
         </div>
@@ -208,13 +208,14 @@ export const AxiomAICopilot = ({ editor, isOpen, onClose, selectedText }: AxiomA
 
           {/* Quick AI Presets */}
           <div className="flex flex-col gap-1">
-            <span className="text-[9px] font-bold text-steel uppercase tracking-wider px-1">Quick Edits</span>
+            <span className="text-[9px] font-bold axiom-text-muted uppercase tracking-wider px-1">Quick Edits</span>
             <div className="grid grid-cols-2 gap-1.5">
               {AI_OPTIONS.map((opt) => (
                 <button
                   key={opt.name}
                   onClick={() => executeAICommand(opt.prompt, selectedText || editor.state.doc.textContent)}
-                  className="px-2.5 py-2 text-left bg-[#2a2a32]/40 border border-smoke/20 hover:border-[#8b5cf6]/40 rounded-lg text-[10.5px] font-medium hover:bg-[#8b5cf6]/5 text-steel hover:text-purple-300 transition-all cursor-pointer truncate"
+                  className="px-2.5 py-2 text-left axiom-bg border axiom-border rounded-lg text-[10.5px] font-medium hover:axiom-bg-card axiom-text-muted hover:axiom-text transition-all cursor-pointer truncate"
+                  style={{ ':hover': { borderColor: 'var(--axiom-primary)' } } as any}
                 >
                   {opt.name}
                 </button>
@@ -223,20 +224,20 @@ export const AxiomAICopilot = ({ editor, isOpen, onClose, selectedText }: AxiomA
           </div>
 
           {/* Custom Instruction Box */}
-          <form onSubmit={handleCustomSubmit} className="flex flex-col gap-1.5 border-t border-smoke/10 pt-2.5">
-            <span className="text-[9px] font-bold text-steel uppercase tracking-wider px-1">Custom Prompt</span>
-            <div className="flex items-center gap-2 bg-[#2a2a32]/60 border border-smoke/30 rounded-md px-2.5 py-1.5 focus-within:border-[#8b5cf6]/80 transition-colors">
+          <form onSubmit={handleCustomSubmit} className="flex flex-col gap-1.5 border-t axiom-border pt-2.5">
+            <span className="text-[9px] font-bold axiom-text-muted uppercase tracking-wider px-1">Custom Prompt</span>
+            <div className="flex items-center gap-2 axiom-input rounded-md px-2.5 py-1.5 transition-colors">
               <input
                 type="text"
                 placeholder="Ask AI to write or edit..."
                 value={customPrompt}
                 onChange={(e) => setCustomPrompt(e.target.value)}
-                className="bg-transparent border-0 p-0 text-xs text-bone focus:outline-none flex-1 min-w-0"
+                className="bg-transparent border-0 p-0 text-xs axiom-text focus:outline-none flex-1 min-w-0"
               />
               <button 
                 type="submit" 
                 disabled={!customPrompt.trim()} 
-                className="text-purple-400 hover:text-purple-300 disabled:opacity-40 cursor-pointer shrink-0"
+                className="axiom-primary-text-muted hover:opacity-80 disabled:opacity-40 cursor-pointer shrink-0 transition-opacity"
               >
                 <Send size={13} />
               </button>

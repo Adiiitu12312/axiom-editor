@@ -3,7 +3,8 @@ import { ReactNodeViewRenderer } from '@tiptap/react';
 import { SourceLinkNodeView } from './SourceLinkNodeView';
 
 export interface SourceLinkOptions {
-  HTMLAttributes: Record<string, any>;  
+  HTMLAttributes: Record<string, any>;
+  pasteRules: boolean;
 }
 
 export const SourceLinkExtension = Node.create<SourceLinkOptions>({
@@ -16,6 +17,7 @@ export const SourceLinkExtension = Node.create<SourceLinkOptions>({
   addOptions() {
     return {
       HTMLAttributes: {},
+      pasteRules: true,
     };
   },
 
@@ -71,6 +73,7 @@ export const SourceLinkExtension = Node.create<SourceLinkOptions>({
   },
 
   addInputRules() {
+    if (!this.options.pasteRules) return [];
     return [
       nodeInputRule({
         find: /(\/cite-((?:\(['"][^'"]+['"]\s*\|\s*['"][^'"]+['"]\)-?)+))/,
@@ -90,6 +93,7 @@ export const SourceLinkExtension = Node.create<SourceLinkOptions>({
   },
 
   addPasteRules() {
+    if (!this.options.pasteRules) return [];
     return [
       nodePasteRule({
         find: /(\/cite-((?:\(['"][^'"]+['"]\s*\|\s*['"][^'"]+['"]\)-?)+))/g,

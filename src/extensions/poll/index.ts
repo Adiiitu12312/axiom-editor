@@ -17,6 +17,12 @@ export const PollExtension = Node.create({
       question: {
         default: 'What is your question?',
       },
+      align: {
+        default: 'center',
+      },
+      width: {
+        default: '100%',
+      },
       options: {
         default: [
           { id: '1', text: 'Option 1' },

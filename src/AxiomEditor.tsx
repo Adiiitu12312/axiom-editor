@@ -44,9 +44,9 @@ export const AxiomEditor: React.FC<AxiomEditorProps> = ({
       features={features}
     >
       <div className="axiom-editor-wrapper flex flex-col gap-4">
-        <AxiomToolbar />
+        {features?.toolbar !== false && <AxiomToolbar />}
         <AxiomContent />
-        <MediaMenu />
+        {features?.toolbar !== false && <MediaMenu />}
       </div>
     </AxiomEditorProvider>
   );

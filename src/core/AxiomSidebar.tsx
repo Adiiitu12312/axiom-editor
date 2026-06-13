@@ -43,13 +43,13 @@ export const AxiomSidebar: React.FC = () => {
   };
 
   return (
-    <div className="w-80 border-l border-smoke/30 bg-charcoal/50 backdrop-blur-xl flex flex-col transition-all duration-300 relative z-20">
-      <div className="p-4 border-b border-smoke/30 flex items-center justify-between bg-charcoal/80">
-        <div className="flex items-center gap-2 text-amber font-display font-semibold">
+    <div className="w-80 axiom-bg-card border-l axiom-border flex flex-col transition-all duration-300 relative z-20">
+      <div className="p-4 border-b axiom-border flex items-center justify-between axiom-bg">
+        <div className="flex items-center gap-2 font-display font-semibold" style={{ color: 'var(--axiom-primary)' }}>
           <Sparkles className="w-4 h-4" />
           <span>Document AI</span>
         </div>
-        <button onClick={() => setSidebarOpen(false)} className="text-steel hover:text-white transition-colors">
+        <button onClick={() => setSidebarOpen(false)} className="axiom-text-muted hover:opacity-80 transition-opacity">
           <X className="w-4 h-4" />
         </button>
       </div>
@@ -57,54 +57,54 @@ export const AxiomSidebar: React.FC = () => {
       <div className="flex-1 overflow-y-auto p-4 custom-scrollbar space-y-4">
         {!response && !loading && (
           <div className="space-y-2">
-            <button onClick={() => handleAsk("Summarize this document in 3 bullet points.")} className="w-full text-left p-3 rounded-lg bg-black/20 hover:bg-black/40 border border-smoke/20 text-sm text-bone transition-colors">
+            <button onClick={() => handleAsk("Summarize this document in 3 bullet points.")} className="w-full text-left p-3 rounded-lg border axiom-border hover:bg-white/10 text-sm axiom-text transition-all" style={{ backgroundColor: 'rgba(255, 255, 255, 0.03)' }}>
               Summarize Document
             </button>
-            <button onClick={() => handleAsk("Identify any grammatical errors or awkward phrasing.")} className="w-full text-left p-3 rounded-lg bg-black/20 hover:bg-black/40 border border-smoke/20 text-sm text-bone transition-colors">
+            <button onClick={() => handleAsk("Identify any grammatical errors or awkward phrasing.")} className="w-full text-left p-3 rounded-lg border axiom-border hover:bg-white/10 text-sm axiom-text transition-all" style={{ backgroundColor: 'rgba(255, 255, 255, 0.03)' }}>
               Proofread Document
             </button>
-            <button onClick={() => handleAsk("Suggest a compelling title and subtitle based on the content.")} className="w-full text-left p-3 rounded-lg bg-black/20 hover:bg-black/40 border border-smoke/20 text-sm text-bone transition-colors">
+            <button onClick={() => handleAsk("Suggest a compelling title and subtitle based on the content.")} className="w-full text-left p-3 rounded-lg border axiom-border hover:bg-white/10 text-sm axiom-text transition-all" style={{ backgroundColor: 'rgba(255, 255, 255, 0.03)' }}>
               Suggest Titles
             </button>
           </div>
         )}
 
         {loading && (
-          <div className="flex items-center justify-center p-8 text-amber">
+          <div className="flex items-center justify-center p-8" style={{ color: 'var(--axiom-primary)' }}>
             <Loader2 className="w-6 h-6 animate-spin" />
           </div>
         )}
 
         {response && !loading && (
           <div className="space-y-3">
-            <div className="prose prose-sm prose-invert max-w-none text-bone/90" dangerouslySetInnerHTML={{ __html: response }} />
-            <button onClick={handleInsert} className="w-full py-2 bg-amber/10 hover:bg-amber/20 text-amber font-medium text-sm rounded-lg border border-amber/30 transition-colors mt-4">
+            <div className="prose prose-sm max-w-none axiom-text" dangerouslySetInnerHTML={{ __html: response }} />
+            <button onClick={handleInsert} className="w-full py-2 axiom-primary-bg font-medium text-sm rounded-lg transition-colors mt-4">
               Insert at Cursor
             </button>
-            <button onClick={() => setResponse(null)} className="w-full py-2 text-steel hover:text-white text-sm transition-colors mt-1">
+            <button onClick={() => setResponse(null)} className="w-full py-2 axiom-text-muted hover:opacity-80 text-sm transition-opacity mt-1">
               Clear
             </button>
           </div>
         )}
       </div>
 
-      <div className="p-4 border-t border-smoke/30 bg-charcoal/80">
-        <div className="flex items-center gap-2 bg-black/40 border border-smoke/30 rounded-xl px-3 py-2 focus-within:border-amber/50 transition-colors">
+      <div className="p-4 border-t axiom-border axiom-bg">
+        <div className="flex items-center gap-2 axiom-input border axiom-border rounded-xl px-3 py-2 transition-colors" style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }}>
           <input 
             type="text" 
             value={prompt}
             onChange={e => setPrompt(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && handleAsk()}
             placeholder="Ask AI about the doc..."
-            className="flex-1 w-full bg-transparent text-sm text-bone focus:outline-none placeholder:text-steel/70"
+            className="flex-1 w-full bg-transparent text-sm axiom-text focus:outline-none"
             disabled={loading || !aiProvider}
           />
-          <button onClick={() => handleAsk()} disabled={!prompt.trim() || loading || !aiProvider} className="text-amber hover:text-amber/80 disabled:opacity-50 disabled:cursor-not-allowed">
+          <button onClick={() => handleAsk()} disabled={!prompt.trim() || loading || !aiProvider} style={{ color: 'var(--axiom-primary)' }} className="hover:opacity-80 disabled:opacity-50 disabled:cursor-not-allowed">
             <Send className="w-4 h-4" />
           </button>
         </div>
         {!aiProvider && (
-          <p className="text-[10px] text-red-400 mt-2 text-center">AI Provider not configured.</p>
+          <p className="text-[10px] text-red-500 mt-2 text-center">AI Provider not configured.</p>
         )}
       </div>
     </div>

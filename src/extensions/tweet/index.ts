@@ -2,10 +2,20 @@ import { mergeAttributes, Node, nodePasteRule } from '@tiptap/core';
 import { ReactNodeViewRenderer } from '@tiptap/react';
 import { TweetNodeView } from './TweetNodeView';
 
-export const TweetExtension = Node.create({
+export interface TweetOptions {
+  pasteRules: boolean;
+}
+
+export const TweetExtension = Node.create<TweetOptions>({
   name: 'tweet',
   group: 'block',
   atom: true,
+
+  addOptions() {
+    return {
+      pasteRules: true,
+    };
+  },
 
   addAttributes() {
     return {
@@ -49,6 +59,7 @@ export const TweetExtension = Node.create({
   },
 
   addPasteRules() {
+    if (!this.options.pasteRules) return [];
     return [
       nodePasteRule({
         find: /https?:\/\/(?:www\.|mobile\.)?(?:twitter|x)\.com\/[a-zA-Z0-9_]+\/status\/([0-9]+)(?:\?\S*)?/gi,
