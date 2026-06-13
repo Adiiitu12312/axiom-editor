@@ -51,3 +51,4 @@ export const PollExtension = Node.create({
     return ReactNodeViewRenderer(PollNodeView);
   },
 });
+ 
