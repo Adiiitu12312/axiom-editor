@@ -25,7 +25,7 @@ export default defineConfig({
                 'react-dom',
                 'lucide-react',
                 'dompurify',
-                'highlight.js',
+                /^highlight\.js.*/,
                 'lowlight',
                 'tippy.js',
                 'tiptap-extension-global-drag-handle',
