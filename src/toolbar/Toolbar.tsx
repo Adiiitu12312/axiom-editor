@@ -1,15 +1,15 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { 
   Undo, Redo, Bold, Italic, Underline as UnderlineIcon, Strikethrough, 
-  Highlighter, Link as LinkIcon, Quote, List, ListOrdered, 
-  AlignLeft, AlignCenter, AlignRight, CheckCircle2, CloudUpload, ImagePlus,
-  Video as YoutubeIcon, MessageSquare as Twitter, Camera as Instagram, MessageSquareWarning, Code, CheckSquare, BarChart3, Sparkles
+  Highlighter, Quote, List, ListOrdered, 
+  AlignLeft, AlignCenter, AlignRight, CheckCircle2, CloudUpload,
+  CheckSquare
 } from 'lucide-react';
 import { useAxiomEditor } from '../core/AxiomEditorContext';
 import { ToolbarButton } from './ToolbarButton';
 
 export const AxiomToolbar: React.FC = () => {
-  const { editor, features, isSaved, setMediaModalOpen, setMediaModalType, setMediaModalInput, sidebarOpen, setSidebarOpen } = useAxiomEditor();
+  const { editor, features, isSaved } = useAxiomEditor();
   const [textColorOpen, setTextColorOpen] = useState(false);
   const textColorRef = useRef<HTMLDivElement>(null);
 
@@ -41,32 +41,6 @@ export const AxiomToolbar: React.FC = () => {
     }
     return true; // Default show all if true or undefined
   };
-
-  const insertMedia = (type: 'link' | 'video' | 'tweet' | 'instagram') => {
-    if (type === 'link' && features?.link === false) return;
-    if (type !== 'link' && features?.embeds === false) return;
-    setMediaModalInput('');
-    setMediaModalType(type);
-    setMediaModalOpen(true);
-  };
-
-  const handleImageClick = () => {
-    if (features?.image === false) return;
-    const position = editor.state.selection.from;
-    const input = document.createElement('input');
-    input.type = 'file';
-    input.accept = 'image/*';
-    input.onchange = async (e) => {
-      const file = (e.target as HTMLInputElement).files?.[0];
-      if (file) {
-        window.dispatchEvent(new CustomEvent('axiom-image-upload', { detail: { file, position } }));
-      }
-    };
-    input.click();
-  };
-
-  const embedsEnabled = features?.embeds !== false;
-  const embedConfig = typeof features?.embeds === 'object' ? features.embeds : {};
 
   return (
     <div className="-mx-1 px-1 mb-2">
@@ -200,13 +174,6 @@ export const AxiomToolbar: React.FC = () => {
               )}
             </div>
           )}
-
-          {shouldShow('link') && features?.link !== false && (
-            <ToolbarButton 
-              icon={<LinkIcon className="w-4 h-4" />} title="Link" active={editor.isActive('link')} 
-              onClick={() => editor.getAttributes('link').href ? editor.chain().focus().unsetLink().run() : insertMedia('link')} 
-            />
-          )}
         </div>
 
         <div className="w-px h-6 axiom-border-separator hidden sm:block" />
@@ -217,11 +184,6 @@ export const AxiomToolbar: React.FC = () => {
           {shouldShow('h2') && features?.heading !== false && <ToolbarButton variant="text" label="H2" title="Heading 2" active={editor.isActive('heading', { level: 2 })} onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} />}
           {shouldShow('h3') && features?.heading !== false && <ToolbarButton variant="text" label="H3" title="Heading 3" active={editor.isActive('heading', { level: 3 })} onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()} />}
           {shouldShow('blockquote') && features?.blockquote !== false && <ToolbarButton icon={<Quote className="w-4 h-4" />} title="Blockquote" active={editor.isActive('blockquote')} onClick={() => editor.chain().focus().toggleBlockquote().run()} />}
-          {shouldShow('codeBlock') && features?.codeBlock !== false && <ToolbarButton icon={<Code className="w-4 h-4" />} title="Code Block" active={editor.isActive('codeBlock')} onClick={() => editor.chain().focus().toggleCodeBlock().run()} />}
-          
-          {shouldShow('callout') && features?.callout !== false && (
-            <ToolbarButton icon={<MessageSquareWarning className="w-4 h-4" />} title="Callout" active={editor.isActive('callout')} onClick={() => editor.chain().focus().insertContent({ type: 'callout', content: [{ type: 'paragraph' }] }).run()} />
-          )}
         </div>
 
         <div className="w-px h-6 axiom-border-separator hidden sm:block" />
@@ -242,29 +204,6 @@ export const AxiomToolbar: React.FC = () => {
 
         <div className="w-px h-6 axiom-border-separator hidden md:block" />
 
-        {/* Media & Extras */}
-        <div className="axiom-toolbar-group">
-          {shouldShow('image') && features?.image !== false && (
-            <ToolbarButton icon={<ImagePlus className="w-4 h-4" />} label="Image" title="Insert Image" onClick={handleImageClick} />
-          )}
-          
-          {shouldShow('video') && embedsEnabled && embedConfig.youtube !== false && (
-            <ToolbarButton icon={<YoutubeIcon className="w-4 h-4" />} label="Video" title="Insert Video" onClick={() => insertMedia('video')} />
-          )}
-          {shouldShow('tweet') && embedsEnabled && embedConfig.tweet !== false && (
-            <ToolbarButton icon={<Twitter className="w-4 h-4" />} label="Tweet" title="Insert Tweet" onClick={() => insertMedia('tweet')} />
-          )}
-          {shouldShow('instagram') && embedsEnabled && embedConfig.instagram !== false && (
-            <ToolbarButton icon={<Instagram className="w-4 h-4" />} label="Instagram" title="Insert Instagram" onClick={() => insertMedia('instagram')} />
-          )}
-          {shouldShow('poll') && features?.poll !== false && (
-            <ToolbarButton icon={<BarChart3 className="w-4 h-4" />} label="Poll" title="Insert Poll" onClick={() => editor.chain().focus().insertContent({ type: 'poll' }).run()} />
-          )}
-          {shouldShow('aiCopilot') && features?.aiCopilot !== false && (
-            <ToolbarButton icon={<Sparkles className="w-4 h-4" />} label="AI Docs" title="Open Document AI" active={sidebarOpen} onClick={() => setSidebarOpen(!sidebarOpen)} />
-          )}
-        </div>
-
         <div className="flex-1 min-w-[20px]" />
 
         {/* Metrics & Sync Status */}
@@ -282,7 +221,7 @@ export const AxiomToolbar: React.FC = () => {
               </div>
             ) : (
               <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest axiom-primary-text-muted">
-                <CloudUpload className="w-4 h-4 animate-pulse" /><span>Syncing</span>
+                <CloudUpload className="w-4 h-4 animate-pulse" /><span>Saving</span>
               </div>
             )}
           </div>
@@ -292,6 +231,3 @@ export const AxiomToolbar: React.FC = () => {
     </div>
   );
 };
- 
- 
-  

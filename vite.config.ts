@@ -14,9 +14,9 @@ export default defineConfig({
   build: {
     lib: {
       entry: path.resolve(__dirname, 'src/index.ts'),
-      name: 'AxiomEditor',
+      name: 'CursusEditor',
       formats: ['es', 'cjs'],
-      fileName: (format) => `axiom-editor.${format === 'es' ? 'es.js' : 'cjs'}`,
+      fileName: (format) => `cursus-editor.${format === 'es' ? 'es.js' : 'cjs'}`,
     },
     rollupOptions: {
       // Make sure to externalize deps that shouldn't be bundled into your library
@@ -26,15 +26,10 @@ export default defineConfig({
         'react-dom', 
         'lucide-react',
         'dompurify',
-        'highlight.js',
-        /^highlight\.js\/lib\/.*/,
-        'lowlight',
         'tippy.js',
         'tiptap-extension-global-drag-handle',
         /^@tiptap\/.*/,
-        /^prosemirror-.*/,
-        /^y-.*/,
-        'yjs'
+        /^prosemirror-.*/
       ],
       output: {
         // Provide global variables to use in the UMD build for externalized deps
@@ -43,8 +38,6 @@ export default defineConfig({
           'react-dom': 'ReactDOM',
           'lucide-react': 'LucideReact',
           dompurify: 'DOMPurify',
-          'highlight.js': 'hljs',
-          lowlight: 'lowlight',
           'tippy.js': 'tippy'
         },
       },

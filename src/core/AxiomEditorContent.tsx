@@ -2,9 +2,6 @@ import React from 'react';
 import { EditorContent } from '@tiptap/react';
 import { useAxiomEditor } from './AxiomEditorContext';
 import { AxiomBubbleMenu } from './AxiomBubbleMenu';
-import { AxiomFindReplace } from './AxiomFindReplace';
-import { AxiomAICopilot } from './AxiomAICopilot';
-import { AxiomSidebar } from './AxiomSidebar';
 
 export const AxiomContent: React.FC = () => {
   const { 
@@ -12,13 +9,7 @@ export const AxiomContent: React.FC = () => {
     features,
     minHeight, 
     maxHeight, 
-    height, 
-    findReplaceOpen, 
-    setFindReplaceOpen,
-    aiCopilotOpen,
-    setAICopilotOpen,
-    aiSelectedText,
-    setAISelectedText
+    height
   } = useAxiomEditor();
 
   if (!editor) return null;
@@ -43,39 +34,13 @@ export const AxiomContent: React.FC = () => {
     >
       <div 
         className="flex-1 axiom-editor-canvas relative overflow-y-auto overflow-x-hidden shadow-inner custom-scrollbar min-h-0 h-full axiom-bg axiom-text"
+        onClick={() => editor?.commands.focus()}
       >
         <EditorContent editor={editor} className="min-h-full" />
         {features?.bubbleMenu !== false && (
-          <AxiomBubbleMenu 
-            editor={editor} 
-            onAskAI={(text) => {
-              setAISelectedText(text);
-              setAICopilotOpen(true);
-            }}
-          />
+          <AxiomBubbleMenu editor={editor} />
         )}
       </div>
-
-      {features?.aiCopilot !== false && <AxiomSidebar />}
-
-      {features?.findReplace !== false && (
-        <AxiomFindReplace 
-          editor={editor} 
-          isOpen={findReplaceOpen} 
-          onClose={() => setFindReplaceOpen(false)} 
-        />
-      )}
-      {features?.aiCopilot !== false && (
-        <AxiomAICopilot 
-          editor={editor}
-          isOpen={aiCopilotOpen}
-          onClose={() => setAICopilotOpen(false)}
-          selectedText={aiSelectedText}
-        />
-      )}
     </div>
   );
 };
- 
- 
-  

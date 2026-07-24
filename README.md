@@ -1,43 +1,55 @@
-<div align="center">
-  <h1>🪐 Axiom Editor (v3.0)</h1>
-  <p><strong>A premium, enterprise-ready block editor built on Tiptap & React.</strong></p>
-  
-  [![NPM Version](https://img.shields.io/npm/v/axiom-editor.svg?style=flat-square)](https://www.npmjs.com/package/axiom-editor)
-  [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](https://opensource.org/licenses/MIT)
-  [![Build Status](https://img.shields.io/github/actions/workflow/status/Adiiitu12312/axiom-editor/ci.yml?style=flat-square)](https://github.com/Adiiitu12312/axiom-editor/actions)
-</div>
+# Cursus Editor
 
-<br />
+A lightweight, highly customizable, and 100x secure rich-text block editor built on top of [Tiptap](https://tiptap.dev/) and React.
 
-Axiom Editor is not just a rich-text editor—it is a full-featured narrative block environment designed to feel cinematic and responsive. It features a native **AI Copilot**, dynamic **Slash Commands**, fully interactive **Media Embeds**, and deep customization options allowing you to tailor the editor perfectly to your app's aesthetics.
+Cursus Editor provides a beautiful, Notion-style editing experience out of the box, with full support for Markdown shortcuts, drag-and-drop blocks, floating bubble menus, and deep customizability. 
 
----
+## Features
 
-## 🚀 Installation & Quick Start
+- 🛡️ **100x Secure**: Fortified with strict `DOMPurify` allow-lists. Defends against XSS, TabNabbing, and malicious iframe injections natively.
+- 🎨 **Fully Customizable**: Built to be completely restyled. Inject your own CSS variables to instantly theme the editor.
+- 🚀 **Markdown Shortcuts**: Type `1.`, `-`, `>` or `#` to instantly create lists, quotes, and headings.
+- 🧱 **Block Architecture**: Notion-style drag-and-drop block handles for seamless reordering.
+- 💬 **Bubble Menu**: Highlight text to access a beautiful floating formatting menu with custom text highlights.
+- 📏 **Input Constraints**: Optionally restrict the maximum number of lines, characters, or characters-per-line.
 
-Axiom Editor relies on a headless core (Tiptap) and React for its UI components.
+## Installation
 
-### 1. Install the Package
+Install via npm:
+
 ```bash
-npm install axiom-editor @tiptap/core @tiptap/react
+npm install cursus-editor
 ```
 
-### 2. Basic Setup
-To get started, simply mount the `AxiomEditor` component and import its CSS bundle.
+Make sure you also install the peer dependencies:
+
+```bash
+npm install react react-dom
+```
+
+## Quick Start
+
+Import the editor and its core styles into your React application:
 
 ```tsx
-import React from 'react';
-import { AxiomEditor } from 'axiom-editor';
-
-// IMPORTANT: You must import the default CSS for blocks to render correctly!
-import 'axiom-editor/style.css'; 
+import { useState } from 'react';
+import { CursusEditor } from 'cursus-editor';
+import 'cursus-editor/style.css'; // Don't forget the core styles!
 
 function App() {
+  const [content, setContent] = useState("<p>Hello World</p>");
+
   return (
-    <div className="editor-container">
-      <AxiomEditor 
-        initialContent="<h1>Welcome to Axiom</h1><p>Start typing...</p>" 
-        onChange={(json, html) => console.log('Editor updated:', html)}
+    <div style={{ maxWidth: '800px', margin: '0 auto' }}>
+      <CursusEditor
+        initialContent={content}
+        onChange={(json, html) => setContent(html)}
+        features={{
+          toolbar: false, // Turn off the top static toolbar
+          bubbleMenu: true, // Use the floating Notion-style menu
+          list: true,
+          heading: true
+        }}
       />
     </div>
   );
@@ -46,173 +58,68 @@ function App() {
 export default App;
 ```
 
----
+## Customization
 
-## ⚙️ Ultimate Modularity (Feature Flags)
+Cursus Editor is designed to inherit your application's typography and color scheme automatically. You can easily override its internal CSS variables to match your exact brand.
 
-### 1. The Editor component
-The `AxiomEditor` is the core text area. It accepts standard Tiptap `initialContent` (HTML string or JSON) and calls `onChange` whenever the content is modified.
-
-### 2. Feature Configuration (In-Depth Disabling)
-Axiom allows you to completely enable or disable individual blocks, plugins, and UI components. When a feature (like `codeBlock` or `image`) is disabled, **the underlying extension is completely unloaded**, preventing any bypasses via Markdown shortcuts or pasted HTML. 
-
-```tsx
-const features = {
-  // Core Text Blocks (Level 10 Security: fully unloads extension if false)
-  image: true,         // Allows image uploads & drops
-  codeBlock: true,     // Allows ``` syntax and code blocks
-  heading: true,       // Allows h1, h2, h3
-  blockquote: true,    // Allows blockquotes
-  link: true,          // Allows hyperlink parsing
-  list: true,          // Handles bullet, ordered, and task lists
-  align: true,         // Allows text alignment
-  bold: true,          
-  italic: true,        
-  underline: true,
-  strike: true,
-  textColor: true,
-  undo: true,
-  redo: true,
-
-  // UI Components
-  toolbar: {
-    // Pass an array to strictly define which buttons appear in the toolbar
-    items: ['bold', 'italic', 'h1', 'h2', 'codeBlock', 'image', 'video']
-  },
-  bubbleMenu: true,        // Floating text-selection menu
-  slashCommands: true,     // Floating '/' popup menu for block insertion
-
-  // Premium Blocks
-  aiCopilot: { provider: customAIProvider }, // Set to false to disable
-  callout: true,           // Warning/Info Callout blocks
-  poll: true,              // Interactive poll blocks
-  tableOfContents: true,   // Dynamic TOC sidebar
-  
-  // Third-Party Embeds
-  embeds: {
-    youtube: true,
-    tweet: true,
-    instagram: true
-  }
-};
-```
-
----
-
-## 🎨 Design Aesthetics & UI Customization
-
-Axiom Editor does **not** force a rigid UI on you. It relies entirely on **CSS Variables**, allowing you to seamlessly integrate it into your application's unique theme (dark mode, light mode, glassmorphic, etc.).
-
-### Theming via CSS Variables
-To completely customize the UI (the Toolbar, Slash Menu, AI Copilot, Bubble Menu, etc.), define these variables in the global CSS file where the editor is mounted:
+Wrap the editor in a container (or target `.axiom-editor-wrapper`) and set your custom properties:
 
 ```css
-:root {
-  /* Core Editor Canvas & Popups */
-  --axiom-bg: rgba(20, 20, 20, 0.95);
-  --axiom-bg-hover: rgba(255, 255, 255, 0.08);
+.axiom-editor-wrapper {
+  /* Core Backgrounds */
+  --axiom-bg: #ffffff;
+  --axiom-bg-card: #f4f4f5;
   
-  /* Text Colors */
-  --axiom-text: #ffffff;
-  --axiom-text-muted: #a0a0a0;
+  /* Typography */
+  --axiom-text: #18181b;
+  --axiom-text-muted: #a1a1aa;
   
-  /* Borders and Dividers */
-  --axiom-border: rgba(255, 255, 255, 0.12);
-  
-  /* Brand/Primary Highlight (Used for active states and buttons) */
+  /* Primary Brand Color (Used for active buttons and highlights) */
   --axiom-primary: #3b82f6; 
+  
+  /* Borders */
+  --axiom-border: #e4e4e7;
+  
+  /* List Markers (Optional: Inherits text color by default) */
+  --axiom-list-marker-color: #3b82f6; 
 }
 ```
-*Note: Because the editor uses CSS variables at its core, all deeply nested popups (Slash menus, Poll config, Media config) will instantly adapt to your colors without complex overrides!*
 
----
+## Headless Rendering (Read-Only)
 
-## 🤖 Feature Operations & Guide
+If you are saving the editor's content as a JSON string to your database, you can use the lightweight `CursusJSONRenderer` to display the content beautifully *without* loading the entire editor engine.
 
-### 1. AI Copilot (`AxiomAICopilot.tsx`)
-- **Activation:** Highlight any text and select the **"✨ Ask AI"** button from the floating Bubble Menu to open the Copilot Sidebar.
-- **Capabilities:** Built to handle smart prompts like "Summarize this block", "Improve phrasing", or "Fix grammar".
-- **Architecture:** The Sidebar intercepts the Tiptap editor state, reads the exact highlighted selection, and replaces it with AI-generated responses. *(Note: You must hook up your own backend API handler to execute the LLM inference).*
-
-### 2. Slash Menu (`/`)
-- **Activation:** Typing `/` anywhere on a blank line triggers a dynamic, floating Command List.
-- **Customization:** It intelligently tracks the cursor position to prevent overflowing out of the viewport. Can be completely disabled via `features.slashCommands = false`.
-
-### 3. Interactive Media Blocks
-- **Supported Platforms:** Tweets, YouTube, Instagram, and native Images.
-- **Media Controls:** Clicking on any active media block or Poll opens a dedicated floating **Media Menu**, allowing users to align the block (Left, Center, Right) or resize it (25%, 50%, 100%) dynamically.
-
-### 4. Source Pills (`/cite`)
-- **Activation:** A custom Markdown-style syntax parser. 
-- **Usage:** Typing `/cite-("Google"|"https://google.com")` instantly replaces the text with a gorgeous, un-editable interactive UI pill, excellent for footnotes and academic citations.
-
----
-
-## 📄 Rendering Content
-
-Axiom Editor passes its output in two formats via the `onChange` callback: `json` (Tiptap JSON) and `html` (Raw HTML string). Depending on your use case, Axiom provides three distinct ways to render this content on your frontend:
-
-### 1. The Premium JSON Renderer (`AxiomJSONRenderer`) **[Recommended]**
-This is the most powerful and secure way to render content. It takes the raw `JSONContent` from the editor and uses our custom React engine to reconstruct complex interactive blocks like Tweets, Instagram Posts, YouTube Videos, Polls, Callouts, and Table of Contents without relying on dangerously setting inner HTML.
-Importantly, it also completely strips hidden **"Stash"** blocks, ensuring internal notes never reach the reader's screen.
+This is perfect for blogs, articles, or feed views where the user is just reading.
 
 ```tsx
-import { AxiomJSONRenderer } from 'axiom-editor';
+import { CursusJSONRenderer } from 'cursus-editor';
+import 'cursus-editor/style.css'; // Requires core styles for typography
 
-// Inside your display component
-<AxiomJSONRenderer content={savedJsonContent} />
+function BlogPost({ contentJSON }) {
+  // contentJSON is the JSON output saved from CursusEditor's onChange
+  
+  return (
+    <div className="axiom-editor-wrapper">
+      <CursusJSONRenderer content={JSON.parse(contentJSON)} />
+    </div>
+  );
+}
 ```
 
-### 2. Standard HTML Rendering (`generateAxiomHtml`)
-If you want a lightweight solution without dynamic React components (Polls, TOC, etc.), you can generate clean HTML from the editor's JSON output using our built-in `generateAxiomHtml` utility. This utility leverages `@tiptap/html` and accurately renders your custom features under the hood. It also automatically applies `DOMPurify` natively (in browser environments) to ensure your output is instantly safe from XSS.
+## Available Props
 
-```tsx
-import { generateAxiomHtml } from 'axiom-editor';
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `initialContent` | `string \| JSONContent` | `""` | The starting HTML string or Tiptap JSON. |
+| `onChange` | `(json, html) => void` | `undefined` | Callback fired when the content changes. |
+| `features` | `AxiomFeaturesConfig` | All True | Toggle specific editor features on/off (e.g. `list: false`). |
+| `minHeight` | `string \| number` | `undefined` | Set a minimum CSS height for the editor canvas. |
+| `maxHeight` | `string \| number` | `undefined` | Set a maximum CSS height (enables scrolling). |
+| `height` | `string \| number` | `undefined` | Set a fixed CSS height. |
+| `maxLines` | `number` | `undefined` | Prevents creating new blocks once the limit is reached. |
+| `maxChars` | `number` | `undefined` | Hard limit on the total character count. |
+| `maxCharsPerLine` | `number` | `undefined` | Prevents typing if the current block exceeds this length. |
 
-// Use the exported utility to convert JSON -> HTML. 
-// Note: It returns safely DOMPurified HTML automatically!
-const safeHtml = generateAxiomHtml(savedJsonContent, featuresConfig);
+## License
 
-// Inside your display component
-<div 
-  className="axiom-editor-canvas prose prose-invert max-w-none text-bone"
-  dangerouslySetInnerHTML={{ __html: safeHtml }} 
-/>
-```
-
-### 3. Raw JSON Data Handling
-If you are building native iOS/Android apps or a completely custom frontend, you can simply store the raw JSON and parse it manually on your client.
-
-```tsx
-<AxiomEditor 
-  initialContent={""} 
-  onChange={(json) => {
-    // Save `json` directly to your database
-    fetch('/api/save', { method: 'POST', body: JSON.stringify(json) })
-  }}
-/>
-```
-
----
-
-## 🛡️ Level 10 Security
-Axiom implements military-grade security for user-generated content:
-- **Zero-Bypass Disabling:** If a core feature (like `image` or `codeBlock`) is disabled in the config, the extension is stripped from the engine at runtime. Users cannot bypass this via pasted HTML, drag-and-drop, or Markdown shortcuts.
-- **Deep DOMPurify Sanitization:** All initial HTML strings and dynamically pasted HTML are piped through `dompurify` before ever touching the DOM.
-- **Iframe Strictness:** Only `youtube.com/embed/` URLs are allowed in iframes. `onerror`, `onload`, and `onclick` attributes are aggressively stripped to prevent XSS.
-
----
-
-## 🏗️ Architecture Under the Hood
-
-For advanced developers wanting to fork, extend, or contribute:
-- **Tiptap Core**: Axiom leverages Tiptap's headless architecture. We define custom `Node` and `Mark` extensions in the `/src/extensions/` directory.
-- **React NodeViews**: Complex blocks like Polls, Tweets, and Callouts are rendered using Tiptap's `ReactNodeViewRenderer`. This bridges the gap between Tiptap's ProseMirror state and React, allowing us to put fully functional, interactive React components inside the rich-text editor canvas!
-- **Unified State Management**: The editor uses a unified `AxiomEditorContext` to distribute feature flags, AI handlers, modal states, and the active `Editor` instance down to the Toolbar, Bubble Menu, and all nested extensions.
-
----
-*Built with ❤️ for modern narrative experiences.*
-
-<br />
-
-**Tags:** `react-editor` `tiptap-extensions` `notion-style-editor` `block-editor` `wysiwyg` `ai-copilot` `rich-text-editor` `markdown-editor` `tailwind-editor`
+MIT License. See `LICENSE` for more information.

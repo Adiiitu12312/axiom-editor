@@ -1,18 +1,14 @@
 // Core Components
-export { AxiomEditor } from './AxiomEditor';
-export { AxiomJSONRenderer } from './AxiomJSONRenderer';
-export { useAxiomEditor } from './core/AxiomEditorContext';
-export { AxiomEditorProvider } from './core/AxiomEditorProvider';
-export { AxiomContent } from './core/AxiomEditorContent';
-export { generateAxiomHtml } from './AxiomHtmlRenderer';
-export { AxiomToolbar } from './toolbar/Toolbar';
-export { MediaMenu } from './toolbar/MediaMenu';
+export { CursusEditor } from './CursusEditor';
+export { CursusJSONRenderer } from './CursusJSONRenderer';
+export { useAxiomEditor as useCursusEditor } from './core/AxiomEditorContext';
+export { CursusEditorProvider } from './core/CursusEditorProvider';
+export { AxiomContent as CursusContent } from './core/AxiomEditorContent';
+export { generateCursusHtml } from './CursusHtmlRenderer';
+export { AxiomToolbar as CursusToolbar } from './toolbar/Toolbar';
 
 // Types
-export type { AxiomEditorProps } from './AxiomEditor';
+export type { CursusEditorProps } from './CursusEditor';
 
 // CSS
 import './style.css';
- 
- 
-  
